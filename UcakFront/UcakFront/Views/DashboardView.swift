@@ -11,7 +11,7 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack(){
             VStack(){
-                Text("Halo dunia")
+                Text("Halow dunia")
             }
             .navigationTitle("UcakFront")
         }
