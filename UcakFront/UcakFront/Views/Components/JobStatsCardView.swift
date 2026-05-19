@@ -29,6 +29,7 @@ struct JobStatsCardView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(Color.themeAccent)
+                    .glassEffect(.clear)
                     .cornerRadius(12)
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
@@ -57,7 +58,9 @@ struct JobStatsCardView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(Color.themeSecondary)
+                    .glassEffect(.clear)
                     .cornerRadius(12)
+                
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.gray)
@@ -85,6 +88,7 @@ struct JobStatsCardView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
                     .background(Color.themeGray2)
+                    .glassEffect(.clear)
                     .cornerRadius(12)
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .semibold))
@@ -101,6 +105,7 @@ struct JobStatsCardView: View {
                 .shadow(color: Color.black.opacity(0.04), radius: 10, x: 0, y: 4)
         )
         .padding(.horizontal, 16)
+        
     }
 }
 

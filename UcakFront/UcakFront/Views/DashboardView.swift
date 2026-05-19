@@ -26,10 +26,12 @@ struct DashboardView: View {
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(Color.themeTypography)
                                 .frame(width: 36, height: 36)
-                                .background(Color.themeCardBackground)
+                                .background(.ultraThickMaterial)
                                 .clipShape(Circle())
                                 .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
                         }
+                        .buttonStyle(.plain)
+                        .glassEffect()
                         Spacer()
                     }
                     .padding(.horizontal, 20)

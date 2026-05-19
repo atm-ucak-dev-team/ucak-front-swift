@@ -26,6 +26,8 @@ struct OverviewCardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.themeSecondary)
             )
+            .glassEffect(.clear, in: .rect(cornerRadius:10))
+            
             ZStack(){
                 HStack(){
                     Image(systemName: "hourglass")
@@ -42,6 +44,8 @@ struct OverviewCardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.themeAccent)
             )
+            .glassEffect(.clear, in: .rect(cornerRadius:10))
+            
             ZStack(){
                 HStack(){
                     Image(systemName: "trash.fill")
@@ -58,6 +62,7 @@ struct OverviewCardView: View {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color.themeGray2)
             )
+            .glassEffect(.clear, in: .rect(cornerRadius:10))
         }
         .foregroundColor(Color.white)
         .padding(10)
