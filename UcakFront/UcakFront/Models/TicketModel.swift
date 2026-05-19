@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct Ticket {
+    let text: String
+    var answer: String = ""
+}

@@ -11,7 +11,7 @@ import SwiftUI
 struct UcakFrontApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            DashboardView()
         }
     }
 }

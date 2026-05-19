@@ -11,9 +11,10 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack(){
             VStack(){
-                Text("Halow dunia")
+                DummyCardView()
+                Spacer()
             }
-            .navigationTitle("UcakFront")
+            .navigationTitle("Follup")
         }
     }
 }
