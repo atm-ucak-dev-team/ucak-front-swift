@@ -25,8 +25,8 @@
 
 /* Begin PBXFileReference section */
 		38852BCB2FB95DBA008AF901 /* FollupApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FollupApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		38852BD82FB95DBB008AF901 /* UcakFrontTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UcakFrontTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		38852BE22FB95DBB008AF901 /* UcakFrontUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UcakFrontUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		38852BD82FB95DBB008AF901 /* FollupTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FollupTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		38852BE22FB95DBB008AF901 /* FollupAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FollupAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -86,8 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				38852BCB2FB95DBA008AF901 /* FollupApp.app */,
-				38852BD82FB95DBB008AF901 /* UcakFrontTests.xctest */,
-				38852BE22FB95DBB008AF901 /* UcakFrontUITests.xctest */,
+				38852BD82FB95DBB008AF901 /* FollupTests.xctest */,
+				38852BE22FB95DBB008AF901 /* FollupAppUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,9 +117,9 @@
 			productReference = 38852BCB2FB95DBA008AF901 /* FollupApp.app */;
 			productType = "com.apple.product-type.application";
 		};
-		38852BD72FB95DBB008AF901 /* UcakFrontTests */ = {
+		38852BD72FB95DBB008AF901 /* FollupTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38852BEF2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFrontTests" */;
+			buildConfigurationList = 38852BEF2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupTests" */;
 			buildPhases = (
 				38852BD42FB95DBB008AF901 /* Sources */,
 				38852BD52FB95DBB008AF901 /* Frameworks */,
@@ -133,16 +133,16 @@
 			fileSystemSynchronizedGroups = (
 				38852BDB2FB95DBB008AF901 /* FollupTests */,
 			);
-			name = UcakFrontTests;
+			name = FollupTests;
 			packageProductDependencies = (
 			);
 			productName = UcakFrontTests;
-			productReference = 38852BD82FB95DBB008AF901 /* UcakFrontTests.xctest */;
+			productReference = 38852BD82FB95DBB008AF901 /* FollupTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		38852BE12FB95DBB008AF901 /* UcakFrontUITests */ = {
+		38852BE12FB95DBB008AF901 /* FollupAppUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38852BF22FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFrontUITests" */;
+			buildConfigurationList = 38852BF22FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupAppUITests" */;
 			buildPhases = (
 				38852BDE2FB95DBB008AF901 /* Sources */,
 				38852BDF2FB95DBB008AF901 /* Frameworks */,
@@ -156,11 +156,11 @@
 			fileSystemSynchronizedGroups = (
 				38852BE52FB95DBB008AF901 /* FollupAppUITests */,
 			);
-			name = UcakFrontUITests;
+			name = FollupAppUITests;
 			packageProductDependencies = (
 			);
 			productName = UcakFrontUITests;
-			productReference = 38852BE22FB95DBB008AF901 /* UcakFrontUITests.xctest */;
+			productReference = 38852BE22FB95DBB008AF901 /* FollupAppUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +186,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 38852BC62FB95DBA008AF901 /* Build configuration list for PBXProject "UcakFront" */;
+			buildConfigurationList = 38852BC62FB95DBA008AF901 /* Build configuration list for PBXProject "FollupApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -201,8 +201,8 @@
 			projectRoot = "";
 			targets = (
 				38852BCA2FB95DBA008AF901 /* FollupApp */,
-				38852BD72FB95DBB008AF901 /* UcakFrontTests */,
-				38852BE12FB95DBB008AF901 /* UcakFrontUITests */,
+				38852BD72FB95DBB008AF901 /* FollupTests */,
+				38852BE12FB95DBB008AF901 /* FollupAppUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -498,7 +498,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UcakFront.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UcakFront";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FollupApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FollupApp";
 				XROS_DEPLOYMENT_TARGET = 26.5;
 			};
 			name = Debug;
@@ -524,7 +524,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2,7";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/UcakFront.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/UcakFront";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FollupApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FollupApp";
 				XROS_DEPLOYMENT_TARGET = 26.5;
 			};
 			name = Release;
@@ -582,7 +582,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		38852BC62FB95DBA008AF901 /* Build configuration list for PBXProject "UcakFront" */ = {
+		38852BC62FB95DBA008AF901 /* Build configuration list for PBXProject "FollupApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38852BEA2FB95DBB008AF901 /* Debug */,
@@ -600,7 +600,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38852BEF2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFrontTests" */ = {
+		38852BEF2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38852BF02FB95DBB008AF901 /* Debug */,
@@ -609,7 +609,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38852BF22FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFrontUITests" */ = {
+		38852BF22FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupAppUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38852BF32FB95DBB008AF901 /* Debug */,
