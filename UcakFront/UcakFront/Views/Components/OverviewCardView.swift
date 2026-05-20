@@ -18,7 +18,7 @@ struct OverviewCardView: View {
                     Text("9")
                         .font(.system(size: 20))
                 }
-                Text("Replied")
+                Text("Replied Check")
                     .font(.system(size: 20))
             }
             .padding()
