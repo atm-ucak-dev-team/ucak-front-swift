@@ -12,6 +12,7 @@ struct Follup: App {
     var body: some Scene {
         WindowGroup {
             DashboardView()
+            //
                 .preferredColorScheme(.light)
         }
     }
