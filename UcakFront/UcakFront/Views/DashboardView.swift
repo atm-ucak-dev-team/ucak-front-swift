@@ -2,7 +2,7 @@
 //  DashboardView.swift
 //  UcakFront
 //
-//  Created by DIMAS DAFFA ERNANDA on 17/05/26.
+//  Created by DIMAS DAFFA ERNANDA on 17/05/26. dan lainnya
 //
 
 import SwiftUI
