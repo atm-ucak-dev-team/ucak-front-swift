@@ -2,12 +2,12 @@
 //  UcakFrontUITestsLaunchTests.swift
 //  UcakFrontUITests
 //
-//  Created by DIMAS DAFFA ERNANDA on 17/05/26.
+//  Created by ATMUCAK  on 17/05/26.
 //
 
 import XCTest
 
-final class UcakFrontUITestsLaunchTests: XCTestCase {
+final class FollupUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

@@ -24,25 +24,25 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		38852BCB2FB95DBA008AF901 /* UcakFront.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UcakFront.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		38852BCB2FB95DBA008AF901 /* FollupApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FollupApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		38852BD82FB95DBB008AF901 /* UcakFrontTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UcakFrontTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		38852BE22FB95DBB008AF901 /* UcakFrontUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UcakFrontUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		38852BCD2FB95DBA008AF901 /* UcakFront */ = {
+		38852BCD2FB95DBA008AF901 /* FollupApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UcakFront;
+			path = FollupApp;
 			sourceTree = "<group>";
 		};
-		38852BDB2FB95DBB008AF901 /* UcakFrontTests */ = {
+		38852BDB2FB95DBB008AF901 /* FollupTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UcakFrontTests;
+			path = FollupTests;
 			sourceTree = "<group>";
 		};
-		38852BE52FB95DBB008AF901 /* UcakFrontUITests */ = {
+		38852BE52FB95DBB008AF901 /* FollupAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UcakFrontUITests;
+			path = FollupAppUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,9 +75,9 @@
 		38852BC22FB95DBA008AF901 = {
 			isa = PBXGroup;
 			children = (
-				38852BCD2FB95DBA008AF901 /* UcakFront */,
-				38852BDB2FB95DBB008AF901 /* UcakFrontTests */,
-				38852BE52FB95DBB008AF901 /* UcakFrontUITests */,
+				38852BCD2FB95DBA008AF901 /* FollupApp */,
+				38852BDB2FB95DBB008AF901 /* FollupTests */,
+				38852BE52FB95DBB008AF901 /* FollupAppUITests */,
 				38852BCC2FB95DBA008AF901 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -85,7 +85,7 @@
 		38852BCC2FB95DBA008AF901 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				38852BCB2FB95DBA008AF901 /* UcakFront.app */,
+				38852BCB2FB95DBA008AF901 /* FollupApp.app */,
 				38852BD82FB95DBB008AF901 /* UcakFrontTests.xctest */,
 				38852BE22FB95DBB008AF901 /* UcakFrontUITests.xctest */,
 			);
@@ -95,9 +95,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		38852BCA2FB95DBA008AF901 /* UcakFront */ = {
+		38852BCA2FB95DBA008AF901 /* FollupApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 38852BEC2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFront" */;
+			buildConfigurationList = 38852BEC2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupApp" */;
 			buildPhases = (
 				38852BC72FB95DBA008AF901 /* Sources */,
 				38852BC82FB95DBA008AF901 /* Frameworks */,
@@ -108,13 +108,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				38852BCD2FB95DBA008AF901 /* UcakFront */,
+				38852BCD2FB95DBA008AF901 /* FollupApp */,
 			);
-			name = UcakFront;
+			name = FollupApp;
 			packageProductDependencies = (
 			);
 			productName = UcakFront;
-			productReference = 38852BCB2FB95DBA008AF901 /* UcakFront.app */;
+			productReference = 38852BCB2FB95DBA008AF901 /* FollupApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 		38852BD72FB95DBB008AF901 /* UcakFrontTests */ = {
@@ -131,7 +131,7 @@
 				38852BDA2FB95DBB008AF901 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				38852BDB2FB95DBB008AF901 /* UcakFrontTests */,
+				38852BDB2FB95DBB008AF901 /* FollupTests */,
 			);
 			name = UcakFrontTests;
 			packageProductDependencies = (
@@ -154,7 +154,7 @@
 				38852BE42FB95DBB008AF901 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				38852BE52FB95DBB008AF901 /* UcakFrontUITests */,
+				38852BE52FB95DBB008AF901 /* FollupAppUITests */,
 			);
 			name = UcakFrontUITests;
 			packageProductDependencies = (
@@ -200,7 +200,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				38852BCA2FB95DBA008AF901 /* UcakFront */,
+				38852BCA2FB95DBA008AF901 /* FollupApp */,
 				38852BD72FB95DBB008AF901 /* UcakFrontTests */,
 				38852BE12FB95DBB008AF901 /* UcakFrontUITests */,
 			);
@@ -258,12 +258,12 @@
 /* Begin PBXTargetDependency section */
 		38852BDA2FB95DBB008AF901 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 38852BCA2FB95DBA008AF901 /* UcakFront */;
+			target = 38852BCA2FB95DBA008AF901 /* FollupApp */;
 			targetProxy = 38852BD92FB95DBB008AF901 /* PBXContainerItemProxy */;
 		};
 		38852BE42FB95DBB008AF901 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 38852BCA2FB95DBA008AF901 /* UcakFront */;
+			target = 38852BCA2FB95DBA008AF901 /* FollupApp */;
 			targetProxy = 38852BE32FB95DBB008AF901 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -392,12 +392,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D79M63NF6C;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Follup;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -414,7 +415,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dimasdaffa.UcakFront;
+				PRODUCT_BUNDLE_IDENTIFIER = com.atmucak.follup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -437,12 +438,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = D79M63NF6C;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Follup;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -459,7 +461,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 26.3;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.dimasdaffa.UcakFront;
+				PRODUCT_BUNDLE_IDENTIFIER = com.atmucak.follup;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
@@ -589,7 +591,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		38852BEC2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "UcakFront" */ = {
+		38852BEC2FB95DBB008AF901 /* Build configuration list for PBXNativeTarget "FollupApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				38852BED2FB95DBB008AF901 /* Debug */,

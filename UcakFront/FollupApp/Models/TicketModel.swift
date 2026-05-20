@@ -1,8 +1,8 @@
 //
 //  TicketModel.swift
-//  UcakFront
+//  FollupApp
 //
-//  Created by DIMAS DAFFA ERNANDA on 17/05/26.
+//  Created by ATMUCAK  on 17/05/26.
 //
 
 import Foundation

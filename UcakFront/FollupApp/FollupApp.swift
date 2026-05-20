@@ -1,14 +1,14 @@
 //
-//  UcakFrontApp.swift
-//  UcakFront
+//  .swift
+//  FollupApp
 //
-//  Created by DIMAS DAFFA ERNANDA on 17/05/26.
+//  Created by ATMUCAK  on 17/05/26.
 //
 
 import SwiftUI
 
 @main
-struct UcakFrontApp: App {
+struct FollupApp: App {
     var body: some Scene {
         WindowGroup {
             DashboardView()

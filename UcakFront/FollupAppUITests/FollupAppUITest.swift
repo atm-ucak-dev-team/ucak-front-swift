@@ -2,12 +2,12 @@
 //  UcakFrontUITests.swift
 //  UcakFrontUITests
 //
-//  Created by DIMAS DAFFA ERNANDA on 17/05/26.
+//  Created by ATMUCAK  on 17/05/26.
 //
 
 import XCTest
 
-final class UcakFrontUITests: XCTestCase {
+final class FollupAppUITest: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
