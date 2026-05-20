@@ -10,6 +10,8 @@ jobs:
   unit-test:
     name: Run Unit Tests
     runs-on: macos-latest
+    permissions:
+      pull-requests: write
 
     steps:
       - name: 📥 Checkout code
@@ -21,6 +23,7 @@ jobs:
           xcode-version: latest-stable
 
       - name: 🧪 Run unit tests
+        working-directory: FollupApp
         run: |
           xcodebuild test \
             -scheme FollupApp.xcodeproj \
@@ -29,6 +32,7 @@ jobs:
            echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
  
       - name: 📊 Parse test results
+        working-directory: FollupApp
         id: parse_results
         if: always()
         run: |
