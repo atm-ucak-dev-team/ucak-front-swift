@@ -11,7 +11,7 @@ FollupApp/
 ├── Views/            # Tampilan (User Interface)
 │   ├── Components/   # Reusable UI (Card, Button, dll)
 │   └── Pages/        # Screen Utama (Layar Penuh)
-├── Extensions/       # Fungsi tambahan (Color, Utils, dll)
+├── Extensions/       # Fungsi tambahan (Color, Utils, API Service, dll)
 └── Assets.xcassets/  # Gambar, Ikon, dan Warna
 ```
 
