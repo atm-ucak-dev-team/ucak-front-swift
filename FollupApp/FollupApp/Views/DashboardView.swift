@@ -11,7 +11,6 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack(){
             VStack(){
-                DummyCardView()
                 Spacer()
             }
             .navigationTitle("Follup")
