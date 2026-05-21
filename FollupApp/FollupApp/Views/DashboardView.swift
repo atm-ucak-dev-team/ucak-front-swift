@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct DashboardView: View {
-    var summaryItems: [SummaryCardItem]?
-    var jobItems: [JobRowCardModel] = []
+    var summaryItems: [StatusSummary]?
+    var jobItems: [FollowUp] = []
     var ticketItems: [JiraTicketItem] = []
     
     var body: some View {
@@ -87,19 +87,48 @@ struct DashboardView: View {
 #Preview("With Data") {
     DashboardView(
         summaryItems: [
-            SummaryCardItem(title: "Replied", iconName: "checkmark", count: 9, color: Color.themeSecondary),
-            SummaryCardItem(title: "Ongoing", iconName: "hourglass", count: 12, color: Color.themeAccent),
-            SummaryCardItem(title: "Expired", iconName: "trash.fill", count: 3, color: Color.themeGray2)
+            StatusSummary(status: .replied, count: 9),
+            StatusSummary(status: .ongoing, count: 12),
+            StatusSummary(status: .expired, count: 3)
         ],
         jobItems: [
-            JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing),
-            JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .replied),
-            JobRowCardModel(jobName: "Job Name", dateInfo: "Last email: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-002", status: .expired)
+            FollowUp(
+                id: UUID(),
+                title: "Azure Migration",
+                status: .ongoing,
+                linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Azure Migration", iconName: "circle.circle.fill"),
+                stakeholder: Stakeholder(id: UUID(), name: "Ujang Pintu", email: "ujang@mail.com"),
+                lastFollowUpDate: Date(),
+                nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!,
+                emailSubject: "Follow-Up",
+                emailBody: "Dear Pak"
+            ),
+            FollowUp(
+                id: UUID(),
+                title: "Cloud Setup",
+                status: .replied,
+                linkedTicket: JiraTicketItem(ticketKey: "ADA-002", title: "Cloud Setup", iconName: "balloon.2.fill"),
+                stakeholder: Stakeholder(id: UUID(), name: "Boma", email: "boma@mail.com"),
+                lastFollowUpDate: Date(),
+                nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!,
+                emailSubject: "Follow-Up",
+                emailBody: "Dear Pak"
+            ),
+            FollowUp(
+                id: UUID(),
+                title: "Database Migration",
+                status: .expired,
+                stakeholder: Stakeholder(id: UUID(), name: "Rudi", email: "rudi@mail.com"),
+                lastFollowUpDate: Date(),
+                nextFollowUpDate: Date(),
+                emailSubject: "Follow-Up",
+                emailBody: "Dear Pak"
+            )
         ],
         ticketItems: [
-            JiraTicketItem(title: "Jira Ticket", iconName: "circle.circle.fill"),
-            JiraTicketItem(title: "Jira Ticket 2", iconName: "balloon.2.fill"),
-            JiraTicketItem(title: "Jira Ticket 3", iconName: "pawprint.fill")
+            JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
+            JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
+            JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
         ]
     )
 }

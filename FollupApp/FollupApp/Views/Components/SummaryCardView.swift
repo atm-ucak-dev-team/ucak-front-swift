@@ -8,17 +8,15 @@
 import SwiftUI
 
 struct SummaryCardView: View {
-    var items: [SummaryCardItem]
+    var items: [StatusSummary]
     
-    init(items: [SummaryCardItem]? = nil) {
+    init(items: [StatusSummary]? = nil) {
         if let items = items, !items.isEmpty {
             self.items = items
         } else {
-            self.items = [
-                SummaryCardItem(title: "Replied", iconName: "checkmark", count: 0, color: Color.themeSecondary),
-                SummaryCardItem(title: "Ongoing", iconName: "hourglass", count: 0, color: Color.themeAccent),
-                SummaryCardItem(title: "Expired", iconName: "trash.fill", count: 0, color: Color.themeGray2)
-            ]
+            self.items = FollowUpStatus.allCases.map { status in
+                StatusSummary(status: status, count: 0)
+            }
         }
     }
     
@@ -27,10 +25,10 @@ struct SummaryCardView: View {
             ForEach(items) { item in
                 VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 5){
-                        Image(systemName: item.iconName)
+                        Image(systemName: item.status.iconName)
                             .font(.system(size: 19, weight: .semibold))
                         
-                        Text(item.title)
+                        Text(item.status.rawValue.capitalized)
                             .font(.subheadline)
                     }
                     Text("\(item.count)")
@@ -41,7 +39,7 @@ struct SummaryCardView: View {
                 .padding(.vertical, 6)
                 .padding(.horizontal, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(item.color)
+                .background(item.status.color)
                 .cornerRadius(12)
                 .glassEffect(.clear, in: .rect(cornerRadius:12))
             }
@@ -59,8 +57,8 @@ struct SummaryCardView: View {
 
 #Preview("With Data") {
     SummaryCardView(items: [
-        SummaryCardItem(title: "Replied", iconName: "checkmark", count: 9, color: Color.themeSecondary),
-        SummaryCardItem(title: "Ongoing", iconName: "hourglass", count: 12, color: Color.themeAccent),
-        SummaryCardItem(title: "Expired", iconName: "trash.fill", count: 3, color: Color.themeGray2)
+        StatusSummary(status: .replied, count: 9),
+        StatusSummary(status: .ongoing, count: 12),
+        StatusSummary(status: .expired, count: 3)
     ])
 }
