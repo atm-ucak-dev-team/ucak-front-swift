@@ -36,7 +36,7 @@ jobs:
           xcodebuild test \
             -project FollupApp.xcodeproj \
             -scheme FollupApp \
-            -destination 'platform=iOS Simulator,name=iPhone 17' \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
             -skip-testing:FollupAppUITests \
            | xcpretty --report json --output test-report.json
            echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
