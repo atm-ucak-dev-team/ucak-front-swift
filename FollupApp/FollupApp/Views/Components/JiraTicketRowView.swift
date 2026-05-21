@@ -28,12 +28,11 @@ struct JiraTicketRowView: View {
                     VStack(spacing: 0) {
                         HStack(spacing: 16) {
                             Image(systemName: ticket.iconName)
-                                .font(.system(size: 24))
+                                .font(.system(size: 28))
                                 .foregroundColor(Color.themeSecondary)
-                                .frame(width: 44, height: 44)
                             
                             Text(ticket.title)
-                                .font(.system(size: 18, weight: .medium))
+                                .font(.system(size: 17))
                                 .foregroundColor(Color.themeTypography)
                             
                             Spacer()
@@ -53,7 +52,7 @@ struct JiraTicketRowView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 0)
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)

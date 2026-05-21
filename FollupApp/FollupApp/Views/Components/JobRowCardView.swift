@@ -60,7 +60,7 @@ struct JobRowCardView: View {
                 .fill(Color.themeCardBackground)
                 .shadow(color: Color.black.opacity(0.04), radius: 10, x: 0, y: 4)
         )
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 20)
     }
 }
 
