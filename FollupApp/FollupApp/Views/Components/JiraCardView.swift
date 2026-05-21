@@ -34,6 +34,7 @@ struct JiraCardView: View {
             .padding(12)
             .background(Color.white)
             .cornerRadius(10)
+            .shadow(color: Color.gray.opacity(0.2), radius: 5, x: 0, y: 2)
         }
         
     }
