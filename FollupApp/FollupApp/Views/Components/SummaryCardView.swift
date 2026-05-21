@@ -8,11 +8,19 @@
 import SwiftUI
 
 struct SummaryCardView: View {
-    private let items: [SummaryCardItem] = [
-        SummaryCardItem(title: "Replied", count: 9, color: Color.themeSecondary),
-        SummaryCardItem(title: "Ongoing", count: 12, color: Color.themeAccent),
-        SummaryCardItem(title: "Expired", count: 3, color: Color.themeGray2)
-    ]
+    var items: [SummaryCardItem]
+    
+    init(items: [SummaryCardItem]? = nil) {
+        if let items = items, !items.isEmpty {
+            self.items = items
+        } else {
+            self.items = [
+                SummaryCardItem(title: "Replied", count: 0, color: Color.themeSecondary),
+                SummaryCardItem(title: "Ongoing", count: 0, color: Color.themeAccent),
+                SummaryCardItem(title: "Expired", count: 0, color: Color.themeGray2)
+            ]
+        }
+    }
     
     var body: some View {
         HStack(spacing: 10) {
@@ -46,6 +54,14 @@ struct SummaryCardView: View {
     }
 }
 
-#Preview {
+#Preview("Empty Data") {
     SummaryCardView()
+}
+
+#Preview("With Data") {
+    SummaryCardView(items: [
+        SummaryCardItem(title: "Replied", count: 9, color: Color.themeSecondary),
+        SummaryCardItem(title: "Ongoing", count: 12, color: Color.themeAccent),
+        SummaryCardItem(title: "Expired", count: 3, color: Color.themeGray2)
+    ])
 }
