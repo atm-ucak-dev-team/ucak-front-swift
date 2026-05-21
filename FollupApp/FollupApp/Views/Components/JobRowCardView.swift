@@ -11,7 +11,7 @@ struct JobRowCardView: View {
     var jobs: [JobRowCardModel] = []
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: -5) {
             if jobs.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "tray")
@@ -45,7 +45,7 @@ struct JobRowCardView: View {
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.gray)
                     }
-                    .padding(.vertical, 14)
+                    .padding(.vertical, 10)
                     
                     if index < jobs.count - 1 {
                         Divider()
@@ -54,7 +54,7 @@ struct JobRowCardView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 5)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.themeCardBackground)

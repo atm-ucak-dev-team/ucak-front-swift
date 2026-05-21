@@ -41,7 +41,7 @@ struct JiraTicketRowView: View {
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.gray.opacity(0.5))
                         }
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 10)
                         
                         if index != tickets.count - 1 {
                             Divider()
