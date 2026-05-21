@@ -16,31 +16,44 @@ struct JobRowCardView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(Array(jobs.enumerated()), id: \.element.id) { index, job in
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(job.jobName)
-                            .font(.system(size: 18))
-                            .foregroundColor(Color.themeTypography)
-                        Text(job.dateInfo)
-                            .font(.system(size: 15))
-                            .foregroundColor(.gray)
-                        Text(job.ticketInfo)
-                            .font(.system(size: 15))
-                            .foregroundColor(.gray)
-                    }
-                    Spacer()
-                    
-                    BadgeStatusCardView(status: job.status)
-                    
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
+            if jobs.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "tray")
+                        .font(.system(size: 48))
+                        .foregroundColor(.gray.opacity(0.8))
+                    Text("No jobs found")
+                        .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.gray)
                 }
-                .padding(.vertical, 14)
-                
-                if index < jobs.count - 1 {
-                    Divider()
+                .padding(.vertical, 32)
+                .frame(maxWidth: .infinity)
+            } else {
+                ForEach(Array(jobs.enumerated()), id: \.element.id) { index, job in
+                    HStack {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(job.jobName)
+                                .font(.system(size: 18))
+                                .foregroundColor(Color.themeTypography)
+                            Text(job.dateInfo)
+                                .font(.system(size: 15))
+                                .foregroundColor(.gray)
+                            Text(job.ticketInfo)
+                                .font(.system(size: 15))
+                                .foregroundColor(.gray)
+                        }
+                        Spacer()
+                        
+                        BadgeStatusCardView(status: job.status)
+                        
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.vertical, 14)
+                    
+                    if index < jobs.count - 1 {
+                        Divider()
+                    }
                 }
             }
         }
@@ -55,6 +68,10 @@ struct JobRowCardView: View {
     }
 }
 
-#Preview {
+#Preview("With Data") {
     JobRowCardView()
+}
+
+#Preview("Empty State") {
+    JobRowCardView(jobs: [])
 }
