@@ -11,6 +11,7 @@ import SwiftUI
 struct SummaryCardItem: Identifiable {
     let id = UUID()
     let title: String
+    let iconName: String
     let count: Int
     let color: Color
 }

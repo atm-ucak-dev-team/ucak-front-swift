@@ -15,9 +15,9 @@ struct SummaryCardView: View {
             self.items = items
         } else {
             self.items = [
-                SummaryCardItem(title: "Replied", count: 0, color: Color.themeSecondary),
-                SummaryCardItem(title: "Ongoing", count: 0, color: Color.themeAccent),
-                SummaryCardItem(title: "Expired", count: 0, color: Color.themeGray2)
+                SummaryCardItem(title: "Replied", iconName: "checkmark", count: 0, color: Color.themeSecondary),
+                SummaryCardItem(title: "Ongoing", iconName: "hourglass", count: 0, color: Color.themeAccent),
+                SummaryCardItem(title: "Expired", iconName: "trash.fill", count: 0, color: Color.themeGray2)
             ]
         }
     }
@@ -25,23 +25,22 @@ struct SummaryCardView: View {
     var body: some View {
         HStack(spacing: 10) {
             ForEach(items) { item in
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 19, weight: .semibold))
-                    
-                    Text(item.title)
-                        .font(.subheadline)
-                    
-                    Spacer()
-                    
+                VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 5){
+                        Image(systemName: item.iconName)
+                            .font(.system(size: 19, weight: .semibold))
+                        
+                        Text(item.title)
+                            .font(.subheadline)
+                    }
                     Text("\(item.count)")
-                        .font(.title)
+                        .font(.system(size: 22))
                         .fontWeight(.bold)
                 }
                 .foregroundColor(.white)
-                .padding(12)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 134)
                 .background(item.color)
                 .cornerRadius(12)
                 .glassEffect(.clear, in: .rect(cornerRadius:12))
@@ -60,8 +59,8 @@ struct SummaryCardView: View {
 
 #Preview("With Data") {
     SummaryCardView(items: [
-        SummaryCardItem(title: "Replied", count: 9, color: Color.themeSecondary),
-        SummaryCardItem(title: "Ongoing", count: 12, color: Color.themeAccent),
-        SummaryCardItem(title: "Expired", count: 3, color: Color.themeGray2)
+        SummaryCardItem(title: "Replied", iconName: "checkmark", count: 9, color: Color.themeSecondary),
+        SummaryCardItem(title: "Ongoing", iconName: "hourglass", count: 12, color: Color.themeAccent),
+        SummaryCardItem(title: "Expired", iconName: "trash.fill", count: 3, color: Color.themeGray2)
     ])
 }
