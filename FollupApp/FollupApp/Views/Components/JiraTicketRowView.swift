@@ -8,37 +8,46 @@
 import SwiftUI
 
 struct JiraTicketRowView: View {
-    private let tickets: [JiraTicketItem] = [
-        JiraTicketItem(title: "Jira Ticket", iconName: "circle.circle.fill"),
-        JiraTicketItem(title: "Jira Ticket 2", iconName: "balloon.2.fill"),
-        JiraTicketItem(title: "Jira Ticket 3", iconName: "pawprint.fill")
-    ]
+    var tickets: [JiraTicketItem] = []
     
     var body: some View {
         VStack(spacing: 0) {
-            ForEach(Array(tickets.enumerated()), id: \.element.id) { index, ticket in
-                VStack(spacing: 0) {
-                    HStack(spacing: 16) {
-                        Image(systemName: ticket.iconName)
-                            .font(.system(size: 24))
-                            .foregroundColor(Color.themeSecondary)
-                            .frame(width: 44, height: 44)
+            if tickets.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "ticket")
+                        .font(.system(size: 48))
+                        .foregroundColor(.gray.opacity(0.8))
+                    Text("No tickets found")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                .padding(.vertical, 32)
+                .frame(maxWidth: .infinity)
+            } else {
+                ForEach(Array(tickets.enumerated()), id: \.element.id) { index, ticket in
+                    VStack(spacing: 0) {
+                        HStack(spacing: 16) {
+                            Image(systemName: ticket.iconName)
+                                .font(.system(size: 24))
+                                .foregroundColor(Color.themeSecondary)
+                                .frame(width: 44, height: 44)
+                            
+                            Text(ticket.title)
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(Color.themeTypography)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.gray.opacity(0.5))
+                        }
+                        .padding(.vertical, 12)
                         
-                        Text(ticket.title)
-                            .font(.system(size: 18, weight: .medium))
-                            .foregroundColor(Color.themeTypography)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.gray.opacity(0.5))
-                    }
-                    .padding(.vertical, 12)
-                    
-                    if index != tickets.count - 1 {
-                        Divider()
-                            .padding(.leading, 60)
+                        if index != tickets.count - 1 {
+                            Divider()
+                                .padding(.leading, 60)
+                        }
                     }
                 }
             }
@@ -54,6 +63,14 @@ struct JiraTicketRowView: View {
     }
 }
 
-#Preview {
+#Preview("With Data") {
+    JiraTicketRowView(tickets: [
+        JiraTicketItem(title: "Jira Ticket", iconName: "circle.circle.fill"),
+        JiraTicketItem(title: "Jira Ticket 2", iconName: "balloon.2.fill"),
+        JiraTicketItem(title: "Jira Ticket 3", iconName: "pawprint.fill")
+    ])
+}
+
+#Preview("Empty State") {
     JiraTicketRowView()
 }
