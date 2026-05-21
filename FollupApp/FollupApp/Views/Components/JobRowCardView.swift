@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct JobRowCardView: View {
-    var jobs: [JobRowCardModel] = [
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .replied),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Last email: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-002", status: .expired)
-    ]
+    var jobs: [JobRowCardModel] = []
     
     var body: some View {
         VStack(spacing: 0) {
@@ -69,9 +65,13 @@ struct JobRowCardView: View {
 }
 
 #Preview("With Data") {
-    JobRowCardView()
+    JobRowCardView(jobs: [
+        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing),
+        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .replied),
+        JobRowCardModel(jobName: "Job Name", dateInfo: "Last email: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-002", status: .expired)
+    ])
 }
 
 #Preview("Empty State") {
-    JobRowCardView(jobs: [])
+    JobRowCardView()
 }
