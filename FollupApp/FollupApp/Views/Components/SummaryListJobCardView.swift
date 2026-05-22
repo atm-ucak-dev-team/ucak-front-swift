@@ -25,8 +25,10 @@ struct SummaryListJobCardView: View {
         HStack {
             ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 if index > 0 {
+                    Spacer()
                     Divider()
                         .frame(height: 90)
+                    Spacer()
                 }
                 
                 Spacer()

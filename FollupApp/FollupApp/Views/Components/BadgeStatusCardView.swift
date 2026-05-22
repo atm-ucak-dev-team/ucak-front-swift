@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BadgeStatusCardView: View {
-    let status: JobStatus
+    let status: FollowUpStatus
     
     var body: some View {
         Text(status.rawValue)

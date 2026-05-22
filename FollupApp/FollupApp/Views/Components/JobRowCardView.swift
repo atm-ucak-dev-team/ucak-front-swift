@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct JobRowCardView: View {
-    var jobs: [JobRowCardModel] = []
+    var viewModel: JobViewModel
     
     var body: some View {
-        VStack(spacing: 0) {
-            if jobs.isEmpty {
+        VStack(spacing: -5) {
+            if viewModel.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "tray")
                         .font(.system(size: 48))
@@ -21,21 +21,22 @@ struct JobRowCardView: View {
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.gray)
                 }
-                .padding(.vertical, 32)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                ForEach(Array(jobs.enumerated()), id: \.element.id) { index, job in
+                ForEach(Array(viewModel.displayedJobs.enumerated()), id: \.element.id) { index, job in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(job.jobName)
+                            Text(job.title)
                                 .font(.system(size: 18))
                                 .foregroundColor(Color.themeTypography)
-                            Text(job.dateInfo)
+                            Text(viewModel.dateInfo(for: job))
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
-                            Text(job.ticketInfo)
-                                .font(.system(size: 15))
-                                .foregroundColor(.gray)
+                            if let ticket = viewModel.ticketInfo(for: job) {
+                                Text(ticket)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.gray)
+                            }
                         }
                         Spacer()
                         
@@ -45,16 +46,21 @@ struct JobRowCardView: View {
                             .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.gray)
                     }
-                    .padding(.vertical, 14)
+                    .padding(.vertical, 10)
                     
-                    if index < jobs.count - 1 {
+                    if !viewModel.isLastItem(index) {
                         Divider()
                     }
+                }
+                
+                if viewModel.needsSpacerFill {
+                    Spacer()
                 }
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 5)
+        .frame(minHeight: 200)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.themeCardBackground)
@@ -65,13 +71,44 @@ struct JobRowCardView: View {
 }
 
 #Preview("With Data") {
-    JobRowCardView(jobs: [
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .replied),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Last email: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-002", status: .expired)
-    ])
+    let vm = JobViewModel()
+    vm.jobs = [
+        FollowUp(
+            id: UUID(),
+            title: "Azure Migration",
+            status: .ongoing,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Azure Migration", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Ujang Pintu", email: "ujang@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!,
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Cloud Setup",
+            status: .replied,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-002", title: "Cloud Setup", iconName: "balloon.2.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Boma", email: "boma@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!,
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Database Migration",
+            status: .expired,
+            stakeholder: Stakeholder(id: UUID(), name: "Rudi", email: "rudi@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Date(),
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        )
+    ]
+    return JobRowCardView(viewModel: vm)
 }
 
 #Preview("Empty State") {
-    JobRowCardView()
+    JobRowCardView(viewModel: JobViewModel())
 }
