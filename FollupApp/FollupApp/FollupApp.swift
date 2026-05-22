@@ -11,8 +11,7 @@ import SwiftUI
 struct FollupApp: App {
     var body: some Scene {
         WindowGroup {
-            DashboardView()
-                .preferredColorScheme(.light)
+            ConnectToJiraView()
         }
     }
 }

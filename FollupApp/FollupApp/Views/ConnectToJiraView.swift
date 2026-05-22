@@ -22,6 +22,10 @@ struct ConnectToJiraView: View {
 
     @State private var isAuthLoading = false
     @State private var errorMessage: String?
+    @State private var authToken: String?
+    @State private var debugRefresh: String?
+    @State private var debugexpiredAt: String?
+    @State private var debugCloudId: String?
 
     var body: some View {
         ZStack {
@@ -52,28 +56,52 @@ struct ConnectToJiraView: View {
                         }
                         
                         isAuthLoading.toggle()
+                        
+                        authToken = KeychainManager.shared.getAccessToken()
+                        debugRefresh = KeychainManager.shared.getRefreshToken()
+                        debugexpiredAt = KeychainManager.shared.getExpirationDate()?.ISO8601Format()
+                        debugCloudId = KeychainManager.shared.getCloudId()
+                        
                     }
                     
                 } label: {
                     Label {
-                        Text(
-                            isAuthLoading ? "Connecting..." : "Connect to Jira"
-                        )
-                        .padding(.vertical, 10)
+                        if authToken != nil {
+                            Text(
+                                "Connected to Jira"
+                            )
+                            .padding(.vertical, 10)
+                        } else {
+                            Text(
+                                isAuthLoading ? "Connecting..." : "Connect to Jira"
+                            )
+                            .padding(.vertical, 10)
+                        }
                     } icon: {
                         if isAuthLoading {
                             ProgressView()
+                        } else if authToken != nil {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(.green)
                         } else {
                             Image(systemName: "app.connected.to.app.below.fill")
                         }
                     }
                 }
                 .buttonStyle(.glass)
+                .disabled(authToken != nil)
                 
 
                 if errorMessage != nil {
                     Text(errorMessage!)
                         .foregroundStyle(errorMessage == nil ? .white : Color.themeAccent)
+                }
+                
+                if authToken != nil {
+                    Text(authToken ?? "Invalid token")
+                    Text(debugRefresh ?? "Invalid token")
+                    Text(debugexpiredAt ?? "Invalid expiration")
+                    Text(debugCloudId ?? "Invalid cloud")
                 }
             }
         }
@@ -149,7 +177,8 @@ class JiraAuthenticationService: NSObject,
                     return
                 }
                 
-                // TODO: Store token data to keychain
+                // Store token data to keychain
+                KeychainManager.shared.save(token)
 
                 // Return token data
                 continuation.resume(returning: token)
