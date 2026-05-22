@@ -36,14 +36,12 @@ struct JiraCardView: View {
                             .font(Font.subheadline.weight(.regular))
                             .foregroundColor(.themeTypography)
                     }
-                    //                    .background(Color.blue)
                     
                     Text(card.ticketKey)
                         .frame(width: 150, alignment: .leading)
                         .multilineTextAlignment(.leading)
                         .font(Font.caption.weight(.medium))
                         .foregroundColor(Color.gray)
-                    //                        .background(Color.green)
                 }
                 .frame(width: 145, alignment: .leading)
                 .padding(12)
@@ -61,7 +59,6 @@ struct JiraCardView: View {
         JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done),
         JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill", status: .inprogress),
         JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill")
-        //status unknown kalo ga nerima data status
     ])
 }
 
