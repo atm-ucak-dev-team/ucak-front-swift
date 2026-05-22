@@ -21,7 +21,8 @@ struct JobRowCardView: View {
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.gray)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(.vertical, 32)
+                .frame(maxWidth: .infinity)
             } else {
                 ForEach(Array(viewModel.displayedJobs.enumerated()), id: \.element.id) { index, job in
                     HStack {
@@ -52,15 +53,11 @@ struct JobRowCardView: View {
                         Divider()
                     }
                 }
-                
-                if viewModel.needsSpacerFill {
-                    Spacer()
-                }
+
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 5)
-        .frame(minHeight: 200)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.themeCardBackground)

@@ -10,7 +10,7 @@ import SwiftUI
 struct DashboardView: View {
     var summaryItems: [StatusSummary]?
     var jobViewModel: JobViewModel = JobViewModel()
-    var ticketItems: [JiraTicketItem] = []
+    var ticketViewModel: JiraTicketViewModel = JiraTicketViewModel()
     
     var body: some View {
         NavigationStack(){
@@ -62,10 +62,10 @@ struct DashboardView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    JiraTicketRowView(tickets: ticketItems)
+                    JiraTicketRowView(viewModel: ticketViewModel)
                 }
-                Spacer()
             }
+            .frame(maxHeight: .infinity, alignment: .top)
             .navigationTitle("Follup")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
@@ -121,6 +121,12 @@ struct DashboardView: View {
             emailBody: "Dear Pak"
         )
     ]
+    let ticketVM = JiraTicketViewModel()
+    ticketVM.tickets = [
+        JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
+        JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
+        JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
+    ]
     return DashboardView(
         summaryItems: [
             StatusSummary(status: .replied, count: 9),
@@ -128,11 +134,7 @@ struct DashboardView: View {
             StatusSummary(status: .expired, count: 3)
         ],
         jobViewModel: jobVM,
-        ticketItems: [
-            JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
-            JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
-            JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
-        ]
+        ticketViewModel: ticketVM
     )
 }
 
