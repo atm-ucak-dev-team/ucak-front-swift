@@ -8,31 +8,11 @@
 import SwiftUI
 
 struct JobRowCardView: View {
-    var jobs: [FollowUp] = []
-    
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE d/M/yyyy"
-        return formatter
-    }()
-    
-    private func dateInfo(for job: FollowUp) -> String {
-        switch job.status {
-        case .expired:
-            return "Last email: \(Self.dateFormatter.string(from: job.lastFollowUpDate))"
-        case .ongoing, .replied:
-            return "Next follow-up: \(Self.dateFormatter.string(from: job.nextFollowUpDate))"
-        }
-    }
-    
-    private func ticketInfo(for job: FollowUp) -> String? {
-        guard let ticket = job.linkedTicket else { return nil }
-        return "Jira Ticket: \(ticket.ticketKey)"
-    }
+    var viewModel: JobViewModel
     
     var body: some View {
         VStack(spacing: -5) {
-            if jobs.isEmpty {
+            if viewModel.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "tray")
                         .font(.system(size: 48))
@@ -41,19 +21,18 @@ struct JobRowCardView: View {
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.gray)
                 }
-                .padding(.vertical, 32)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else {
-                ForEach(Array(jobs.enumerated()), id: \.element.id) { index, job in
+                ForEach(Array(viewModel.displayedJobs.enumerated()), id: \.element.id) { index, job in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(job.title)
                                 .font(.system(size: 18))
                                 .foregroundColor(Color.themeTypography)
-                            Text(dateInfo(for: job))
+                            Text(viewModel.dateInfo(for: job))
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
-                            if let ticket = ticketInfo(for: job) {
+                            if let ticket = viewModel.ticketInfo(for: job) {
                                 Text(ticket)
                                     .font(.system(size: 15))
                                     .foregroundColor(.gray)
@@ -69,14 +48,19 @@ struct JobRowCardView: View {
                     }
                     .padding(.vertical, 10)
                     
-                    if index < jobs.count - 1 {
+                    if !viewModel.isLastItem(index) {
                         Divider()
                     }
+                }
+                
+                if viewModel.needsSpacerFill {
+                    Spacer()
                 }
             }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 5)
+        .frame(minHeight: 200)
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.themeCardBackground)
@@ -87,7 +71,8 @@ struct JobRowCardView: View {
 }
 
 #Preview("With Data") {
-    JobRowCardView(jobs: [
+    let vm = JobViewModel()
+    vm.jobs = [
         FollowUp(
             id: UUID(),
             title: "Azure Migration",
@@ -120,9 +105,10 @@ struct JobRowCardView: View {
             emailSubject: "Follow-Up",
             emailBody: "Dear Pak"
         )
-    ])
+    ]
+    return JobRowCardView(viewModel: vm)
 }
 
 #Preview("Empty State") {
-    JobRowCardView()
+    JobRowCardView(viewModel: JobViewModel())
 }
