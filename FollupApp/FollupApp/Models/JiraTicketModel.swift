@@ -6,11 +6,18 @@
 //
 
 import Foundation
-import SwiftUI
 
 struct JiraTicketItem: Identifiable {
-    let id = UUID() // Contoh: UUID()
-    let ticketKey: String // ex: "ADA-001"
-    let title: String // Contoh: "Azure Migration"
-    let iconName: String // Contoh: "circle.circle.fill"
+    let id = UUID()
+    let ticketKey: String
+    let title: String
+    let iconName: String
+    let status: JiraStatus?
+    
+    init(ticketKey: String, title: String, iconName: String, status: JiraStatus? = nil) {
+        self.ticketKey = ticketKey
+        self.title = title
+        self.iconName = iconName
+        self.status = status
+    }
 }
