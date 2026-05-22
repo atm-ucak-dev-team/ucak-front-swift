@@ -1,18 +1,13 @@
 //
-//  FollowUpStatusModel.swift
+//  FollowUpStatusUI.swift
 //  FollupApp
 //
-//  Created by DIMAS DAFFA ERNANDA on 21/05/26.
+//  Created by DIMAS DAFFA ERNANDA on 22/05/26.
 //
 
-import Foundation
 import SwiftUI
 
-enum FollowUpStatus: String, CaseIterable, Codable {
-    case ongoing = "ONGOING"
-    case replied = "REPLIED"
-    case expired = "EXPIRED"
-
+extension FollowUpStatus {
     var color: Color {
         switch self {
         case .ongoing: return Color.themeAccent
