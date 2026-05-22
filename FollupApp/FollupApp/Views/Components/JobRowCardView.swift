@@ -8,7 +8,27 @@
 import SwiftUI
 
 struct JobRowCardView: View {
-    var jobs: [JobRowCardModel] = []
+    var jobs: [FollowUp] = []
+    
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "EEE d/M/yyyy"
+        return formatter
+    }()
+    
+    private func dateInfo(for job: FollowUp) -> String {
+        switch job.status {
+        case .expired:
+            return "Last email: \(Self.dateFormatter.string(from: job.lastFollowUpDate))"
+        case .ongoing, .replied:
+            return "Next follow-up: \(Self.dateFormatter.string(from: job.nextFollowUpDate))"
+        }
+    }
+    
+    private func ticketInfo(for job: FollowUp) -> String? {
+        guard let ticket = job.linkedTicket else { return nil }
+        return "Jira Ticket: \(ticket.ticketKey)"
+    }
     
     var body: some View {
         VStack(spacing: -5) {
@@ -27,15 +47,17 @@ struct JobRowCardView: View {
                 ForEach(Array(jobs.enumerated()), id: \.element.id) { index, job in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(job.jobName)
+                            Text(job.title)
                                 .font(.system(size: 18))
                                 .foregroundColor(Color.themeTypography)
-                            Text(job.dateInfo)
+                            Text(dateInfo(for: job))
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
-                            Text(job.ticketInfo)
-                                .font(.system(size: 15))
-                                .foregroundColor(.gray)
+                            if let ticket = ticketInfo(for: job) {
+                                Text(ticket)
+                                    .font(.system(size: 15))
+                                    .foregroundColor(.gray)
+                            }
                         }
                         Spacer()
                         
@@ -66,9 +88,38 @@ struct JobRowCardView: View {
 
 #Preview("With Data") {
     JobRowCardView(jobs: [
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Next follow-up: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-001", status: .replied),
-        JobRowCardModel(jobName: "Job Name", dateInfo: "Last email: Mon 12/5/2026", ticketInfo: "Jira Ticket: ADA-002", status: .expired)
+        FollowUp(
+            id: UUID(),
+            title: "Azure Migration",
+            status: .ongoing,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Azure Migration", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Ujang Pintu", email: "ujang@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!,
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Cloud Setup",
+            status: .replied,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-002", title: "Cloud Setup", iconName: "balloon.2.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Boma", email: "boma@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!,
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Database Migration",
+            status: .expired,
+            stakeholder: Stakeholder(id: UUID(), name: "Rudi", email: "rudi@mail.com"),
+            lastFollowUpDate: Date(),
+            nextFollowUpDate: Date(),
+            emailSubject: "Follow-Up",
+            emailBody: "Dear Pak"
+        )
     ])
 }
 
