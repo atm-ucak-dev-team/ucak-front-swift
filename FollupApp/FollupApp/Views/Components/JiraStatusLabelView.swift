@@ -27,5 +27,6 @@ struct JiraStatusLabelView: View {
         JiraStatusLabelView(status: .inprogress)
         JiraStatusLabelView(status: .done)
         JiraStatusLabelView(status: .todo)
+        JiraStatusLabelView(status: .unknown)
     }
 }
