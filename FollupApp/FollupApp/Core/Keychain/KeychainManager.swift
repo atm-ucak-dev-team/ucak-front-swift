@@ -28,10 +28,12 @@ class KeychainManager {
         case expiredAt = "com.app.auth.expiredAt"
         case expirationTime = "com.app.auth.expirationTime"
         case cloudId = "com.app.auth.cloudId"
+        case userId = "com.app.auth.userId"
     }
 
     // MARK: - Refresh Buffer
     private let refreshBuffer: Int = 5 * 60
+    private let baseURL: String = APIClientRegistry.baseUrl
 
     // MARK: - Save
     func save(_ token: Token) {
@@ -40,7 +42,7 @@ class KeychainManager {
         saveToKeychain(token.cloudId, forKey: Key.cloudId.rawValue)
 
         // Simpan langsung Unix Timestamp sebagai String
-        saveToKeychain(String(token.expiresAt), forKey: Key.expiredAt.rawValue) // Store as timestamp
+        saveToKeychain(String(token.expiresAt), forKey: Key.expiredAt.rawValue)  // Store as timestamp
     }
 
     // MARK: - Get
@@ -61,7 +63,7 @@ class KeychainManager {
             let interval = Double(raw)
 
         else { return nil }
-        
+
         return Date(timeIntervalSince1970: interval)
     }
 
@@ -122,7 +124,8 @@ extension KeychainManager: TokenProvider {
 
         // Check if token is still valid
         let now = Int(Date().timeIntervalSince1970)
-        let shouldRefresh = (Int(expirationTime.timeIntervalSince1970) - refreshBuffer) < now
+        let shouldRefresh =
+            (Int(expirationTime.timeIntervalSince1970) - refreshBuffer) < now
 
         guard shouldRefresh else {
             // Token still lvalid
@@ -136,44 +139,44 @@ extension KeychainManager: TokenProvider {
 }
 
 // MARK: - Private: Refresh Logic
-private extension KeychainManager {
- 
+extension KeychainManager {
+
     /// Call POST to refresh token
     @discardableResult
-    func refreshTokens() async throws -> TokenResponse {
+    fileprivate func refreshTokens() async throws -> TokenResponse {
         // 1. Ambil refresh token dari Keychain
         guard let refreshToken = getRefreshToken() else {
             throw KeychainError.noRefreshToken
         }
- 
+
         // 2. Construct request
-        guard let url = URL(string: "https://challenge2.test-bomsiwor.my.id/auth/refresh") else {
+        guard let url = URL(string: "\(baseURL)/auth/refresh") else {
             throw KeychainError.refreshFailed("Invalid URL")
         }
- 
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
- 
+
         let body = ["refreshToken": refreshToken]
         request.httpBody = try JSONEncoder().encode(body)
- 
+
         // 3. Fire request
         let (data, response) = try await URLSession.shared.data(for: request)
- 
+
         guard let httpResponse = response as? HTTPURLResponse else {
             throw KeychainError.refreshFailed("Invalid response")
         }
- 
+
         guard (200...299).contains(httpResponse.statusCode) else {
             throw KeychainError.tokenExpiredAndRefreshFailed
         }
- 
+
         // 4. Decode response
         let decoder = JSONDecoder()
- 
+
         let tokenResponse = try decoder.decode(TokenResponse.self, from: data)
-        
+
         // Setup formatter for expires At
         let isoFormatter = ISO8601DateFormatter()
         let expiredTimestamp: Double
@@ -182,11 +185,20 @@ private extension KeychainManager {
         } else {
             throw KeychainError.refreshFailed("Invalid response")
         }
- 
-        // 5. Store new token 
-        saveToKeychain(tokenResponse.accessToken, forKey: KeychainManager.Key.accessToken.rawValue)
-        saveToKeychain(tokenResponse.refreshToken, forKey: KeychainManager.Key.refreshToken.rawValue)
-        saveToKeychain(String(expiredTimestamp), forKey: KeychainManager.Key.expiredAt.rawValue)
+
+        // 5. Store new token
+        saveToKeychain(
+            tokenResponse.accessToken,
+            forKey: KeychainManager.Key.accessToken.rawValue
+        )
+        saveToKeychain(
+            tokenResponse.refreshToken,
+            forKey: KeychainManager.Key.refreshToken.rawValue
+        )
+        saveToKeychain(
+            String(expiredTimestamp),
+            forKey: KeychainManager.Key.expiredAt.rawValue
+        )
 
         return tokenResponse
     }
@@ -200,16 +212,17 @@ enum KeychainError: LocalizedError {
     case noRefreshToken
     case refreshFailed(String)
     case tokenExpiredAndRefreshFailed
- 
+
     var errorDescription: String? {
         switch self {
-        case .saveFailed(let s):         return "Keychain save failed: \(s)"
-        case .readFailed(let s):         return "Keychain read failed: \(s)"
-        case .deleteFailed(let s):       return "Keychain delete failed: \(s)"
-        case .notFound:                  return "Token not found in Keychain."
-        case .noRefreshToken:            return "No refresh token stored."
-        case .refreshFailed(let msg):    return "Token refresh failed: \(msg)"
-        case .tokenExpiredAndRefreshFailed: return "Session expired. Please log in again."
+        case .saveFailed(let s): return "Keychain save failed: \(s)"
+        case .readFailed(let s): return "Keychain read failed: \(s)"
+        case .deleteFailed(let s): return "Keychain delete failed: \(s)"
+        case .notFound: return "Token not found in Keychain."
+        case .noRefreshToken: return "No refresh token stored."
+        case .refreshFailed(let msg): return "Token refresh failed: \(msg)"
+        case .tokenExpiredAndRefreshFailed:
+            return "Session expired. Please log in again."
         }
     }
 }
