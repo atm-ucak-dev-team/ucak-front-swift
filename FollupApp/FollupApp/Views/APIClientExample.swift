@@ -43,8 +43,10 @@ struct PostsView: View {
 
     var body: some View {
         NavigationStack {
+            
             Text(String(vm.todo?.id ?? 0) ?? "Loading...")
             
+
             Text(vm.todo?.title ?? "Loading...")
             .navigationTitle("Todo")
             .overlay {

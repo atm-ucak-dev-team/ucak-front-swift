@@ -8,6 +8,8 @@
 import Foundation
 
 enum APIClientRegistry {
-    static let general = APIClient(baseURL: "https://challenge2.test-bomsiwor.my.id")
-    static let authenticated = AuthenticatedAPIClient(baseURL: "https://challenge2.test-bomsiwor.my.id", tokenProvider: KeychainManager.shared)
+    static let baseUrl: String = Bundle.main.object(forInfoDictionaryKey: "BackendBaseURL") as? String ?? "http://localhost:3000"
+    
+    static let general = APIClient(baseURL: baseUrl)
+    static let authenticated = AuthenticatedAPIClient(baseURL: baseUrl, tokenProvider: KeychainManager.shared)
 }
