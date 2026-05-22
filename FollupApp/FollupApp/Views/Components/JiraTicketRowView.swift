@@ -41,7 +41,7 @@ struct JiraTicketRowView: View {
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(.gray.opacity(0.5))
                         }
-                        .padding(.vertical, 12)
+                        .padding(.vertical, 10)
                         
                         if index != tickets.count - 1 {
                             Divider()
@@ -64,9 +64,9 @@ struct JiraTicketRowView: View {
 
 #Preview("With Data") {
     JiraTicketRowView(tickets: [
-        JiraTicketItem(title: "Jira Ticket", iconName: "circle.circle.fill"),
-        JiraTicketItem(title: "Jira Ticket 2", iconName: "balloon.2.fill"),
-        JiraTicketItem(title: "Jira Ticket 3", iconName: "pawprint.fill")
+        JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
+        JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
+        JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
     ])
 }
 

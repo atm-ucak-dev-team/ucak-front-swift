@@ -8,33 +8,38 @@
 import SwiftUI
 
 struct SummaryCardView: View {
-    private let items: [SummaryCardItem] = [
-        SummaryCardItem(title: "Replied", count: 9, color: Color.themeSecondary),
-        SummaryCardItem(title: "Ongoing", count: 12, color: Color.themeAccent),
-        SummaryCardItem(title: "Expired", count: 3, color: Color.themeGray2)
-    ]
+    var items: [StatusSummary]
+    
+    init(items: [StatusSummary]? = nil) {
+        if let items = items, !items.isEmpty {
+            self.items = items
+        } else {
+            self.items = FollowUpStatus.allCases.map { status in
+                StatusSummary(status: status, count: 0)
+            }
+        }
+    }
     
     var body: some View {
         HStack(spacing: 10) {
             ForEach(items) { item in
-                VStack(alignment: .leading, spacing: 5) {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 19, weight: .semibold))
-                    
-                    Text(item.title)
-                        .font(.subheadline)
-                    
-                    Spacer()
-                    
+                VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 5){
+                        Image(systemName: item.status.iconName)
+                            .font(.system(size: 19, weight: .semibold))
+                        
+                        Text(item.status.rawValue.capitalized)
+                            .font(.subheadline)
+                    }
                     Text("\(item.count)")
-                        .font(.title)
+                        .font(.system(size: 22))
                         .fontWeight(.bold)
                 }
                 .foregroundColor(.white)
-                .padding(12)
+                .padding(.vertical, 6)
+                .padding(.horizontal, 10)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .frame(height: 134)
-                .background(item.color)
+                .background(item.status.color)
                 .cornerRadius(12)
                 .glassEffect(.clear, in: .rect(cornerRadius:12))
             }
@@ -46,6 +51,14 @@ struct SummaryCardView: View {
     }
 }
 
-#Preview {
+#Preview("Empty Data") {
     SummaryCardView()
+}
+
+#Preview("With Data") {
+    SummaryCardView(items: [
+        StatusSummary(status: .replied, count: 9),
+        StatusSummary(status: .ongoing, count: 12),
+        StatusSummary(status: .expired, count: 3)
+    ])
 }
