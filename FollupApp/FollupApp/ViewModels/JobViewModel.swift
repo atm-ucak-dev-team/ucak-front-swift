@@ -23,9 +23,6 @@ class JobViewModel {
         Array(jobs.prefix(maxDisplayCount))
     }
     
-    var needsSpacerFill: Bool {
-        !isEmpty && displayedJobs.count < maxDisplayCount
-    }
     
     var isLastItem: (Int) -> Bool {
         { [weak self] index in
