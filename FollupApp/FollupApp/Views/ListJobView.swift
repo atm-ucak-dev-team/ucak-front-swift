@@ -11,91 +11,140 @@ struct ListJobView: View {
     @Environment(\.dismiss) var dismiss
     @State private var statusFilter = 0
     
-//    let jobs: [JobRowCardModel] = [
-//        JobRowCardModel(jobName: "Approval", dateInfo: "Next follow up: 21/06/2026", ticketInfo: "Jira Ticket: ADA-002", status: .ongoing),
-//        JobRowCardModel(jobName: "Approval Budget", dateInfo: "Next follow up: 30/06/2026", ticketInfo: "Jira Ticket: ADA-003", status: .replied),
-//        JobRowCardModel(jobName: "Approval Kartini's Day", dateInfo: "Next follow up: 10/06/2026", ticketInfo: "Jira Ticket: ADA-001", status: .ongoing)
-//    ]
+    var listJobViewModel: ListJobViewModel = ListJobViewModel()
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                HStack{
-                    VStack(spacing: 10){
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("1")
-                            .font(.system(size: 28, weight: .bold))
-                        Text("Replied")
-                            .font(.system(size: 16, weight: .medium))
-                    }
+            VStack(spacing: 12) {
+                VStack(spacing: 12){
+                    SummaryListJobCardView(items: listJobViewModel.summaryItems)
                     
-                    Spacer()
-                    Divider()
-                        .frame(height: 90)
-                    Spacer()
-
-                    VStack(spacing: 10){
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("1")
-                            .font(.system(size: 28, weight: .bold))
-                        Text("Replied")
-                            .font(.system(size: 16, weight: .medium))
+                    Picker("Status", selection: $statusFilter) {
+                        Text("All").tag(0)
+                        Text("Replied").tag(1)
+                        Text("Ongoing").tag(2)
+                        Text("Expired").tag(3)
                     }
-                    
-                    Spacer()
-                    Divider()
-                        .frame(height: 90)
-                    Spacer()
-
-                    VStack(spacing: 10){
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 16, weight: .medium))
-                        Text("1")
-                            .font(.system(size: 28, weight: .bold))
-                        Text("Replied")
-                            .font(.system(size: 16, weight: .medium))
+                    .pickerStyle(.segmented)
+                    .onChange(of: statusFilter){
+                        switch statusFilter {
+                        case 1: listJobViewModel.selectedFilter = .replied
+                        case 2: listJobViewModel.selectedFilter = .ongoing
+                        case 3: listJobViewModel.selectedFilter = .expired
+                        default:
+                            listJobViewModel.selectedFilter = nil
+                        }
                     }
                 }
-                .padding(30)
-                .background(Color.themeBackground)
-                .cornerRadius(26)
+                .padding(.horizontal, 20)
                 
-            
-                Picker("Status", selection: $statusFilter) {
-                    Text("All").tag(0)
-                    Text("Replied").tag(1)
-                    Text("Ongoing").tag(2)
-                    Text("Expired").tag(3)
+                ScrollView{
+                    if listJobViewModel.filteredJobs.isEmpty{
+                        VStack (spacing: 12){
+                            Image(systemName: "tray")
+                                .font(.system(size: 48))
+                                .foregroundColor(.gray.opacity(0.8))
+                            Text("No jobs found")
+                                .font(.system(size: 16, weight: .medium))
+                                .foregroundColor(.gray)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: 200)
+                    } else{
+                        JobRowCardView(viewModel: listJobViewModel.jobViewModel, fixedMinHeight: 0)
+                    }
                 }
-                .pickerStyle(.segmented)
-//                Text("Value: \(statusFilter)")
-                
-                }
-//                .toolbar {
-//                    ToolbarItem(placement: .navigationBarLeading) {
-//                        Button(action:{
-//                            dismiss()
-//                        }){
-//                            HStack{
-//                                Image(systemName: "chevron.left")
-//                                Text("Back")
-//                            }
-//                            .font(.system(size: 17, weight: .medium))
-//                        }
-//                    }
-//                }
-//                .navigationBarTitleDisplayMode(.inline)
-            .padding()
-            
-//            JobRowCardView(jobs: jobs)
-            
-            
+            }
+            .navigationTitle("Jira Ticket 1")
+            .foregroundColor(.themeTypography)
+            .toolbar {
+                ToolbarSpacer(.flexible, placement: .automatic)
+                DefaultToolbarItem(kind: .search, placement: .automatic)
+            }
+            .searchable(
+                text: Bindable(listJobViewModel).searchText,
+                placement: .toolbar,
+                prompt: "Search jobs..."
+            )
+            .searchToolbarBehavior(.automatic)
         }
     }
 }
 
-#Preview {
+#Preview("With Data"){
+    let viewModel = ListJobViewModel()
+    viewModel.jobs = [
+        FollowUp(
+            id: UUID(),
+            title: "Approval Budget Q3",
+            status: .ongoing,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Budget Approval", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Budi Santoso", email: "budi.santoso@company.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -2, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())!,
+            emailSubject: "Follow-Up: Budget Approval Q3",
+            emailBody: "Dear Pak Budi, mohon konfirmasi terkait approval budget Q3."
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Server Migration Sign-off",
+            status: .replied,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Server Migration", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Siti Rahayu", email: "siti.rahayu@company.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())!,
+            emailSubject: "Follow-Up: Server Migration Sign-off",
+            emailBody: "Hi Ibu Siti, mohon update terkait sign-off migration."
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Design Review Feedback",
+            status: .ongoing,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Design Review", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Andi Wijaya", email: "andi.wijaya@company.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -4, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 1, to: Date())!,
+            emailSubject: "Follow-Up: Design Review",
+            emailBody: "Halo Pak Andi, apakah sudah ada feedback untuk design review?"
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Vendor Contract Renewal",
+            status: .expired,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Contract Renewal", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Dewi Lestari", email: "dewi.lestari@vendor.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -10, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: -3, to: Date())!,
+            emailSubject: "Follow-Up: Contract Renewal",
+            emailBody: "Dear Ibu Dewi, kami menunggu konfirmasi perpanjangan kontrak."
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Security Audit Approval",
+            status: .replied,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Security Audit", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Rizky Pratama", email: "rizky.pratama@company.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
+            emailSubject: "Follow-Up: Security Audit",
+            emailBody: "Pak Rizky, mohon approval untuk hasil security audit."
+        ),
+        FollowUp(
+            id: UUID(),
+            title: "Security Audit Approval",
+            status: .replied,
+            linkedTicket: JiraTicketItem(ticketKey: "ADA-001", title: "Security Audit", iconName: "circle.circle.fill"),
+            stakeholder: Stakeholder(id: UUID(), name: "Rizky Pratama", email: "rizky.pratama@company.com"),
+            lastFollowUpDate: Calendar.current.date(byAdding: .day, value: -1, to: Date())!,
+            nextFollowUpDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())!,
+            emailSubject: "Follow-Up: Security Audit",
+            emailBody: "Pak Rizky, mohon approval untuk hasil security audit."
+        )
+
+    ]
+    return ListJobView(listJobViewModel: viewModel)
+}
+
+#Preview("Empty Data"){
     ListJobView()
 }

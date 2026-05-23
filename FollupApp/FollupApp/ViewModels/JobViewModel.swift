@@ -10,6 +10,7 @@ import Foundation
 @Observable
 class JobViewModel {
     var jobs: [FollowUp] = []
+    var showAll: Bool = false       //added by eileen
     
     private let maxDisplayCount = 3
     
@@ -20,11 +21,13 @@ class JobViewModel {
     }
     
     var displayedJobs: [FollowUp] {
-        Array(jobs.prefix(maxDisplayCount))
+//        Array(jobs.prefix(maxDisplayCount))
+        showAll ? jobs : Array(jobs.prefix(maxDisplayCount))        //added by eileen
     }
     
     var needsSpacerFill: Bool {
-        !isEmpty && displayedJobs.count < maxDisplayCount
+//        !isEmpty && displayedJobs.count < maxDisplayCount
+        !isEmpty && !showAll && displayedJobs.count < maxDisplayCount       //added by eileen
     }
     
     var isLastItem: (Int) -> Bool {

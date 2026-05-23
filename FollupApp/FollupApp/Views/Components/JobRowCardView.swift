@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobRowCardView: View {
     var viewModel: JobViewModel
+    var fixedMinHeight: CGFloat = 200       //added by eileen
     
     var body: some View {
         VStack(spacing: -5) {
@@ -47,6 +48,9 @@ struct JobRowCardView: View {
                             .foregroundColor(.gray)
                     }
                     .padding(.vertical, 10)
+                    .onTapGesture {     //added by eileen, for debugging
+                        print("Job clicked: \(job.title)")
+                    }
                     
                     if !viewModel.isLastItem(index) {
                         Divider()
@@ -60,7 +64,7 @@ struct JobRowCardView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 5)
-        .frame(minHeight: 200)
+        .frame(minHeight: viewModel.isEmpty ? 200 : fixedMinHeight)       //edited by eileen
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(Color.themeCardBackground)
