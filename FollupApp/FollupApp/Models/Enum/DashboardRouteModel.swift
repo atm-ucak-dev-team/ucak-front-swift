@@ -11,6 +11,7 @@ import Foundation
 /// Declared in the Model layer to keep Views purely presentational and routing unified.
 enum DashboardRoute: Hashable {
     case allJobs
+    case allTickets
     case jobDetail(FollowUp)
     case ticketDetail(JiraTicketItem)
 }

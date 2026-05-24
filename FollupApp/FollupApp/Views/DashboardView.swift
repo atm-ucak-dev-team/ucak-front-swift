@@ -41,9 +41,7 @@ struct DashboardView: View {
                             .font(.system(size: 22))
                             .foregroundColor(Color.themeTypography)
                             .bold()
-                        Button(action: {
-                            print("View All List Tickets")
-                        }) {
+                        NavigationLink(value: DashboardRoute.allTickets) {
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(Color.themeTypography)
@@ -79,6 +77,8 @@ struct DashboardView: View {
                 switch route {
                 case .allJobs:
                     AllJobsView(viewModel: viewModel.allJobsVM())
+                case .allTickets:
+                    AllTicketsView(viewModel: viewModel.allTicketsVM())
                 case .jobDetail(let job):
                     JobDetailView(viewModel: JobDetailViewModel(job: job))
                 case .ticketDetail(let ticket):

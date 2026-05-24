@@ -47,4 +47,11 @@ class DashboardViewModel {
         vm.jobs = jobVM.jobs
         return vm
     }
+    
+    /// Creates an AllTicketsViewModel populated with all dashboard tickets
+    func allTicketsVM() -> AllTicketsViewModel {
+        let vm = AllTicketsViewModel()
+        vm.tickets = ticketVM.tickets
+        return vm
+    }
 }

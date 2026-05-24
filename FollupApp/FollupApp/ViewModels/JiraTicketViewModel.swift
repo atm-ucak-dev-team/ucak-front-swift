@@ -10,6 +10,7 @@ import Foundation
 @Observable
 class JiraTicketViewModel {
     var tickets: [JiraTicketItem] = []
+    var showAll: Bool = false
     
     private let maxDisplayCount = 3
     
@@ -20,7 +21,7 @@ class JiraTicketViewModel {
     }
     
     var displayedTickets: [JiraTicketItem] {
-        Array(tickets.prefix(maxDisplayCount))
+        showAll ? tickets : Array(tickets.prefix(maxDisplayCount))
     }
     
     
