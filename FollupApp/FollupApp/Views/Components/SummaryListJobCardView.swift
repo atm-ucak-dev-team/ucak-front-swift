@@ -8,22 +8,22 @@
 import SwiftUI
 
 struct SummaryListJobCardView: View {
-    var items: [SummaryListJobItem] = []
+    var items: [StatusSummary] = []
     
-    init(items: [SummaryListJobItem]? = nil){
+    init(items: [StatusSummary]? = nil){
         if let items = items, !items.isEmpty{
             self.items = items
         } else{
             self.items = [
-                SummaryListJobItem(icon: "checkmark", title: "Replied", count: 0),
-                SummaryListJobItem(icon: "hourglass", title: "Ongoing", count: 0),
-                SummaryListJobItem(icon: "trash", title: "Expired", count: 0)
+                StatusSummary(status: .replied, count: 0),
+                StatusSummary(status: .ongoing, count: 0),
+                StatusSummary(status: .expired, count: 0)
             ]
         }
     }
     var body: some View {
         HStack {
-            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
+            ForEach(Array(items.enumerated()), id: \.element.id) { (index: Int, item: StatusSummary) in
                 if index > 0 {
                     Spacer()
                     Divider()
@@ -33,33 +33,39 @@ struct SummaryListJobCardView: View {
                 
                 Spacer()
                 VStack(spacing: 10) {
-                    Image(systemName: item.icon)
+                    Image(systemName: item.status.iconName)
                         .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.themeTypography)
                     Text("\(item.count)")
                         .font(.system(size: 28, weight: .bold))
-                    Text(item.title)
+                        .foregroundColor(.themeTypography)
+                    Text(item.status.rawValue.capitalized)
                         .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.themeTypography)
                 }
                 Spacer()
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(30)
-        .background(Color.themeBackground)
-        .cornerRadius(26)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.themeCardBackground)
+                .shadow(color: Color.black.opacity(0.04), radius: 10, x: 0, y: 4)
+        )
     }
 }
 
 #Preview("With Data"){
     SummaryListJobCardView(
         items: [
-            SummaryListJobItem(icon: "checkmark", title: "Replied", count: 2),
-            SummaryListJobItem(icon: "hourglass", title: "Ongoing", count: 1),
-            SummaryListJobItem(icon: "trash", title: "Expired", count: 3)
+            StatusSummary(status: .replied, count: 2),
+            StatusSummary(status: .ongoing, count: 1),
+            StatusSummary(status: .expired, count: 3)
         ]
     )
 }
 
-#Preview("Empty"){
+#Preview("Empty Data"){
     SummaryListJobCardView()
 }
