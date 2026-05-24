@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct ListJobView: View {
+struct TicketDetailView: View {
     @Environment(\.dismiss) var dismiss
     @State private var statusFilter = 0
     
-    var listJobViewModel: ListJobViewModel = ListJobViewModel()
+    var ticketViewModel: TicketViewModel = TicketViewModel()
 
     var body: some View {
         NavigationStack {
             VStack(spacing: 12) {
                 VStack(spacing: 12){
-                    SummaryListJobCardView(items: listJobViewModel.summaryItems)
+                    SummaryListJobCardView(items: ticketViewModel.summaryItems)
                     
                     Picker("Status", selection: $statusFilter) {
                         Text("All").tag(0)
@@ -28,18 +28,18 @@ struct ListJobView: View {
                     .pickerStyle(.segmented)
                     .onChange(of: statusFilter){
                         switch statusFilter {
-                        case 1: listJobViewModel.selectedFilter = .replied
-                        case 2: listJobViewModel.selectedFilter = .ongoing
-                        case 3: listJobViewModel.selectedFilter = .expired
+                        case 1: ticketViewModel.selectedFilter = .replied
+                        case 2: ticketViewModel.selectedFilter = .ongoing
+                        case 3: ticketViewModel.selectedFilter = .expired
                         default:
-                            listJobViewModel.selectedFilter = nil
+                            ticketViewModel.selectedFilter = nil
                         }
                     }
                 }
                 .padding(.horizontal, 20)
                 
                 ScrollView{
-                    if listJobViewModel.filteredJobs.isEmpty{
+                    if ticketViewModel.filteredJobs.isEmpty{
                         VStack (spacing: 12){
                             Image(systemName: "tray")
                                 .font(.system(size: 48))
@@ -51,7 +51,7 @@ struct ListJobView: View {
                         .frame(maxWidth: .infinity)
                         .frame(minHeight: 200)
                     } else{
-                        JobRowCardView(viewModel: listJobViewModel.jobViewModel, fixedMinHeight: 0)
+                        JobRowCardView(viewModel: ticketViewModel.jobViewModel, fixedMinHeight: 0)
                     }
                 }
             }
@@ -62,7 +62,7 @@ struct ListJobView: View {
                 DefaultToolbarItem(kind: .search, placement: .automatic)
             }
             .searchable(
-                text: Bindable(listJobViewModel).searchText,
+                text: Bindable(ticketViewModel).searchText,
                 placement: .toolbar,
                 prompt: "Search jobs..."
             )
@@ -72,7 +72,7 @@ struct ListJobView: View {
 }
 
 #Preview("With Data"){
-    let viewModel = ListJobViewModel()
+    let viewModel = TicketViewModel()
     viewModel.jobs = [
         FollowUp(
             id: UUID(),
@@ -142,9 +142,9 @@ struct ListJobView: View {
         )
 
     ]
-    return ListJobView(listJobViewModel: viewModel)
+    return TicketDetailView(ticketViewModel: viewModel)
 }
 
 #Preview("Empty Data"){
-    ListJobView()
+    TicketDetailView()
 }

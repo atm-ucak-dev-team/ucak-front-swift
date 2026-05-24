@@ -8,7 +8,7 @@
 import Foundation
 
 @Observable
-class ListJobViewModel{
+class TicketViewModel{
     var jobs: [FollowUp] = []
     var searchText: String = ""
     
