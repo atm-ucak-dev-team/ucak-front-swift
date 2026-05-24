@@ -93,7 +93,7 @@ struct JobDetailView: View {
                 startDate: Date(),
                 expiryDate: Calendar.current.date(byAdding: .day, value: 14, to: Date())!,
                 frequency: 3,
-                repeatInterval: "2 business days",
+                repeatInterval: .daily,
                 requiresConfirmation: true
             ),
             emailSubject: "Follow-Up",

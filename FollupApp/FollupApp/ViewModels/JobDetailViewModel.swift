@@ -34,6 +34,6 @@ class JobDetailViewModel{
     var stakeholderName: String { job?.stakeholder.name ?? "-" }
     var sendEmailEvery: String {
         guard let schedule = job?.schedule else { return "-" }
-        return schedule.repeatInterval
+        return schedule.repeatInterval.rawValue
     }
 }

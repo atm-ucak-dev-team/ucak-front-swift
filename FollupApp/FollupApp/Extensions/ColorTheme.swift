@@ -16,4 +16,5 @@ extension Color {
     static let themeCardBackground = Color(red: 255/255, green: 255/255, blue: 255/255) // #FFFFFF
     static let themeTypography = Color(red: 30/255, green: 41/255, blue: 59/255) // #1E293B
     static let themeGray2 = Color(red: 174/255, green: 174/255, blue: 178/255) // #AEAEB2
+    static let themeFormBackground = Color(red: 243/255, green: 243/255, blue: 243/255) // #F3F3F3
 }
