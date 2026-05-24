@@ -13,6 +13,13 @@ class DashboardViewModel {
     var jobVM = JobViewModel()
     var ticketVM = JiraTicketViewModel()
     
+    // Mock Data only appear in debug mode not in production
+    init() {
+        #if DEBUG
+        MockData.populateDashboard(self)
+        #endif
+    }
+    
     // MARK: - Computed Summary
     /// Derives summary counts directly from jobs data — single source of truth
     var summaryItems: [StatusSummary] {
