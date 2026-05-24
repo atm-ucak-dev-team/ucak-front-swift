@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 struct DashboardView: View {
     @State var viewModel = DashboardViewModel()
     
@@ -20,9 +19,7 @@ struct DashboardView: View {
                             .font(.system(size: 22))
                             .foregroundColor(Color.themeTypography)
                             .bold()
-                        Button(action: {
-                            print("View All List Jobs")
-                        }) {
+                        NavigationLink(value: DashboardRoute.allJobs) {
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(Color.themeTypography)
@@ -83,6 +80,12 @@ struct DashboardView: View {
             }
             .navigationDestination(for: JiraTicketItem.self) { ticket in
                 TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
+            }
+            .navigationDestination(for: DashboardRoute.self) { route in
+                switch route {
+                case .allJobs:
+                    AllJobsView(viewModel: viewModel.allJobsVM())
+                }
             }
         }
     }

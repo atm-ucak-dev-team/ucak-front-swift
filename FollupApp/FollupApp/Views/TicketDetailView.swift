@@ -51,7 +51,7 @@ struct TicketDetailView: View {
         }
         .searchable(
             text: Bindable(ticketViewModel).searchText,
-            placement: .toolbar,
+            placement: .navigationBarDrawer(displayMode: .always),
             prompt: "Search jobs..."
         )
         .searchToolbarBehavior(.automatic)
