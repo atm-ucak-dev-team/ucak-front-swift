@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct JiraTicketRowView: View {
-    var tickets: [JiraTicketItem] = []
+    var viewModel: JiraTicketViewModel
     
     var body: some View {
         VStack(spacing: 0) {
-            if tickets.isEmpty {
+            if viewModel.isEmpty {
                 VStack(spacing: 12) {
                     Image(systemName: "ticket")
                         .font(.system(size: 48))
@@ -24,7 +24,7 @@ struct JiraTicketRowView: View {
                 .padding(.vertical, 32)
                 .frame(maxWidth: .infinity)
             } else {
-                ForEach(Array(tickets.enumerated()), id: \.element.id) { index, ticket in
+                ForEach(Array(viewModel.displayedTickets.enumerated()), id: \.element.id) { index, ticket in
                     VStack(spacing: 0) {
                         HStack(spacing: 16) {
                             Image(systemName: ticket.iconName)
@@ -43,7 +43,7 @@ struct JiraTicketRowView: View {
                         }
                         .padding(.vertical, 10)
                         
-                        if index != tickets.count - 1 {
+                        if !viewModel.isLastItem(index) {
                             Divider()
                                 .padding(.leading, 60)
                         }
@@ -52,7 +52,7 @@ struct JiraTicketRowView: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 0)
+        .padding(.vertical, 5)
         .background(
             RoundedRectangle(cornerRadius: 20)
                 .fill(Color.white)
@@ -63,13 +63,15 @@ struct JiraTicketRowView: View {
 }
 
 #Preview("With Data") {
-    JiraTicketRowView(tickets: [
+    let vm = JiraTicketViewModel()
+    vm.tickets = [
         JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
         JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
         JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
-    ])
+    ]
+    return JiraTicketRowView(viewModel: vm)
 }
 
 #Preview("Empty State") {
-    JiraTicketRowView()
+    JiraTicketRowView(viewModel: JiraTicketViewModel())
 }
