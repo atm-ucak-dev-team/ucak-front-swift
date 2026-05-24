@@ -11,8 +11,19 @@ import Foundation
 class TicketViewModel{
     var jobs: [FollowUp] = []
     var searchText: String = ""
-    
     var selectedFilter: FollowUpStatus? = nil
+    var selectedJobTitle: String? = nil
+    
+    var statusFilterIndex: Int = 0{
+        didSet {
+            switch statusFilterIndex {
+            case 1: selectedFilter = .replied
+            case 2: selectedFilter = .ongoing
+            case 3: selectedFilter = .expired
+            default: selectedFilter = nil
+            }
+        }
+    }
     
     var filteredJobs: [FollowUp]{
         var result = jobs

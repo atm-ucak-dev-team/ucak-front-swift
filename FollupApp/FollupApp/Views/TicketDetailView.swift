@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct TicketDetailView: View {
-    @Environment(\.dismiss) var dismiss
-    @State private var statusFilter = 0
-    
-    var ticketViewModel: TicketViewModel = TicketViewModel()
+//    @Environment(\.dismiss) var dismiss
+    @State var ticketViewModel: TicketViewModel = TicketViewModel()
 
     var body: some View {
         NavigationStack {
@@ -19,22 +17,13 @@ struct TicketDetailView: View {
                 VStack(spacing: 12){
                     SummaryListJobCardView(items: ticketViewModel.summaryItems)
                     
-                    Picker("Status", selection: $statusFilter) {
+                    Picker("Status", selection: Bindable(ticketViewModel).statusFilterIndex) {
                         Text("All").tag(0)
                         Text("Replied").tag(1)
                         Text("Ongoing").tag(2)
                         Text("Expired").tag(3)
                     }
                     .pickerStyle(.segmented)
-                    .onChange(of: statusFilter){
-                        switch statusFilter {
-                        case 1: ticketViewModel.selectedFilter = .replied
-                        case 2: ticketViewModel.selectedFilter = .ongoing
-                        case 3: ticketViewModel.selectedFilter = .expired
-                        default:
-                            ticketViewModel.selectedFilter = nil
-                        }
-                    }
                 }
                 .padding(.horizontal, 20)
                 
@@ -55,7 +44,8 @@ struct TicketDetailView: View {
                     }
                 }
             }
-            .navigationTitle("Jira Ticket 1")
+            .navigationTitle(ticketViewModel.selectedJobTitle ?? "Ticket Details")
+            .navigationBarTitleDisplayMode(.inline)
             .foregroundColor(.themeTypography)
             .toolbar {
                 ToolbarSpacer(.flexible, placement: .automatic)
@@ -73,6 +63,7 @@ struct TicketDetailView: View {
 
 #Preview("With Data"){
     let viewModel = TicketViewModel()
+    viewModel.selectedJobTitle = "Budget Approval"
     viewModel.jobs = [
         FollowUp(
             id: UUID(),
