@@ -67,26 +67,6 @@ class TicketViewModel{
         ]
     }
     
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "EEE d/M/yyyy"
-        return formatter
-    }()
-    
-    func dateInfo(for job: FollowUp) -> String {
-        switch job.status {
-        case .expired:
-            return "Last email: \(Self.dateFormatter.string(from: job.lastFollowUpDate))"
-        case .ongoing, .replied:
-            return "Next follow-up: \(Self.dateFormatter.string(from: job.nextFollowUpDate))"
-        }
-    }
-    
-    func ticketInfo(for job: FollowUp) -> String? {
-        guard let ticket = job.linkedTicket else { return nil }
-        return "Jira Ticket: \(ticket.ticketKey)"
-    }
-    
     func isLastItem(_ index: Int) -> Bool {
         index >= filteredJobs.count - 1
     }

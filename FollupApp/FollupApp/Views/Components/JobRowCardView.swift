@@ -31,10 +31,10 @@ struct JobRowCardView: View {
                             Text(job.title)
                                 .font(.system(size: 18))
                                 .foregroundColor(Color.themeTypography)
-                            Text(viewModel.dateInfo(for: job))
+                            Text(job.dateInfoText)
                                 .font(.system(size: 15))
                                 .foregroundColor(.gray)
-                            if let ticket = viewModel.ticketInfo(for: job) {
+                            if let ticket = job.ticketInfoText {
                                 Text(ticket)
                                     .font(.system(size: 15))
                                     .foregroundColor(.gray)
