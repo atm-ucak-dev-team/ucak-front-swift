@@ -26,21 +26,24 @@ struct JiraTicketRowView: View {
             } else {
                 ForEach(Array(viewModel.displayedTickets.enumerated()), id: \.element.id) { index, ticket in
                     VStack(spacing: 0) {
-                        HStack(spacing: 16) {
-                            Image(systemName: ticket.iconName)
-                                .font(.system(size: 28))
-                                .foregroundColor(Color.themeSecondary)
-                            
-                            Text(ticket.title)
-                                .font(.system(size: 17))
-                                .foregroundColor(Color.themeTypography)
-                            
-                            Spacer()
-                            
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.gray.opacity(0.5))
+                        NavigationLink(value: ticket) {
+                            HStack(spacing: 16) {
+                                Image(systemName: ticket.iconName)
+                                    .font(.system(size: 28))
+                                    .foregroundColor(Color.themeSecondary)
+                                
+                                Text(ticket.title)
+                                    .font(.system(size: 17))
+                                    .foregroundColor(Color.themeTypography)
+                                
+                                Spacer()
+                                
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.gray.opacity(0.5))
+                            }
                         }
+                        .buttonStyle(.plain)
                         .padding(.vertical, 10)
                         
                         if !viewModel.isLastItem(index) {

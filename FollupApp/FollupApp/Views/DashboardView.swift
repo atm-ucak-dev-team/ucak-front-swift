@@ -78,6 +78,12 @@ struct DashboardView: View {
                     }
                 }
             }
+            .navigationDestination(for: FollowUp.self) { job in
+                JobDetailView(viewModel: JobDetailViewModel(job: job))
+            }
+            .navigationDestination(for: JiraTicketItem.self) { ticket in
+                TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
+            }
         }
     }
 }

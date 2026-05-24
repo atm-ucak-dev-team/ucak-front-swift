@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct JiraTicketItem: Identifiable {
+struct JiraTicketItem: Identifiable, Hashable {
+    static func == (lhs: JiraTicketItem, rhs: JiraTicketItem) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+    
     let id: String // Contoh: "jira​-20260518​-xyz"
     let ticketKey: String // ex: "ADA-001"
     let title: String // Contoh: "Azure Migration"
