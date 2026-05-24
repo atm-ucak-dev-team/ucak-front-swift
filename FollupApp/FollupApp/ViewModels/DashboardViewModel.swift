@@ -6,3 +6,21 @@
 //
 
 import Foundation
+
+@Observable
+class DashboardViewModel {
+    // MARK: - Child ViewModels
+    var jobVM = JobViewModel()
+    var ticketVM = JiraTicketViewModel()
+    
+    // MARK: - Computed Summary
+    /// Derives summary counts directly from jobs data — single source of truth
+    var summaryItems: [StatusSummary] {
+        FollowUpStatus.allCases.map { status in
+            StatusSummary(
+                status: status,
+                count: jobVM.jobs.filter { $0.status == status }.count
+            )
+        }
+    }
+}

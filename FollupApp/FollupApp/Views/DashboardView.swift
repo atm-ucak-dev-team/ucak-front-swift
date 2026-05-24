@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct DashboardView: View {
-    var summaryItems: [StatusSummary]?
-    var jobViewModel: JobViewModel = JobViewModel()
-    var ticketViewModel: JiraTicketViewModel = JiraTicketViewModel()
+    @State var viewModel = DashboardViewModel()
     
     var body: some View {
         NavigationStack(){
             VStack(spacing: 12){
-                SummaryCardView(items: summaryItems)
+                SummaryCardView(items: viewModel.summaryItems)
                 VStack(spacing: 8){
                     HStack(spacing: 12){
                         Text("Jobs")
@@ -38,7 +36,7 @@ struct DashboardView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    JobRowCardView(viewModel: jobViewModel)
+                    JobRowCardView(viewModel: viewModel.jobVM)
                 }
                 VStack(spacing: 8){
                     HStack(spacing: 12){
@@ -62,7 +60,7 @@ struct DashboardView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    JiraTicketRowView(viewModel: ticketViewModel)
+                    JiraTicketRowView(viewModel: viewModel.ticketVM)
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)
@@ -85,8 +83,8 @@ struct DashboardView: View {
 }
 
 #Preview("With Data") {
-    let jobVM = JobViewModel()
-    jobVM.jobs = [
+    let vm = DashboardViewModel()
+    vm.jobVM.jobs = [
         FollowUp(
             id: UUID(),
             title: "Azure Migration",
@@ -121,21 +119,12 @@ struct DashboardView: View {
             emailBody: "Dear Pak"
         )
     ]
-    let ticketVM = JiraTicketViewModel()
-    ticketVM.tickets = [
+    vm.ticketVM.tickets = [
         JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
         JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
         JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
     ]
-    return DashboardView(
-        summaryItems: [
-            StatusSummary(status: .replied, count: 9),
-            StatusSummary(status: .ongoing, count: 12),
-            StatusSummary(status: .expired, count: 3)
-        ],
-        jobViewModel: jobVM,
-        ticketViewModel: ticketVM
-    )
+    return DashboardView(viewModel: vm)
 }
 
 #Preview("Empty Data") {

@@ -1,5 +1,5 @@
 //
-//  ListJobViewModel.swift
+//  TicketViewModel.swift
 //  FollupApp
 //
 //  Created by Eileen Anindya on 22/05/26.
@@ -13,17 +13,6 @@ class TicketViewModel{
     var searchText: String = ""
     var selectedFilter: FollowUpStatus? = nil
     var selectedJobTitle: String? = nil
-    
-    var statusFilterIndex: Int = 0{
-        didSet {
-            switch statusFilterIndex {
-            case 1: selectedFilter = .replied
-            case 2: selectedFilter = .ongoing
-            case 3: selectedFilter = .expired
-            default: selectedFilter = nil
-            }
-        }
-    }
     
     var filteredJobs: [FollowUp]{
         var result = jobs
@@ -44,11 +33,13 @@ class TicketViewModel{
         return result
     }
 
+    // MARK: - Child ViewModel (stored to prevent re-creation)
+    private var _jobVM = JobViewModel()
+    
     var jobViewModel: JobViewModel {
-        let viewModel = JobViewModel()
-        viewModel.jobs = filteredJobs
-        viewModel.showAll = true
-        return viewModel
+        _jobVM.jobs = filteredJobs
+        _jobVM.showAll = true
+        return _jobVM
     }
     
     var isEmpty: Bool{
@@ -78,7 +69,7 @@ class TicketViewModel{
     
     private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEE d/M/yyy"
+        formatter.dateFormat = "EEE d/M/yyyy"
         return formatter
     }()
     

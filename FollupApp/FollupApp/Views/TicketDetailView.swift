@@ -1,5 +1,5 @@
 //
-//  ListJobView.swift
+//  TicketDetailView.swift
 //  FollupApp
 //
 //  Created by Eileen Anindya on 21/05/26.
@@ -17,11 +17,11 @@ struct TicketDetailView: View {
                 VStack(spacing: 12){
                     SummaryListJobCardView(items: ticketViewModel.summaryItems)
                     
-                    Picker("Status", selection: Bindable(ticketViewModel).statusFilterIndex) {
-                        Text("All").tag(0)
-                        Text("Replied").tag(1)
-                        Text("Ongoing").tag(2)
-                        Text("Expired").tag(3)
+                    Picker("Status", selection: Bindable(ticketViewModel).selectedFilter) {
+                        Text("All").tag(FollowUpStatus?.none)
+                        ForEach(FollowUpStatus.allCases, id: \.self) { status in
+                            Text(status.rawValue.capitalized).tag(Optional(status))
+                        }
                     }
                     .pickerStyle(.segmented)
                 }
