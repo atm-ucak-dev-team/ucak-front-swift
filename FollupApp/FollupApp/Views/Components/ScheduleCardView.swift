@@ -10,7 +10,7 @@ import SwiftUI
 struct ScheduleCardView: View {
     @Binding var startDate: Date
     @Binding var expireDate: Date
-    @Binding var frequency: String
+    @Binding var frequency: Int
     @Binding var repeatInterval: RepeatInterval
     @Binding var confirmBeforeNextFollowUp: Bool
 
@@ -36,7 +36,7 @@ struct ScheduleCardView: View {
                 HStack{
                     Text("Frequency")
                     Spacer()
-                    TextField("1", text: $frequency)
+                    TextField("1", value: $frequency, format: .number)
                         .foregroundColor(.gray)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
@@ -84,7 +84,7 @@ struct ScheduleCardView: View {
 #Preview {
     @Previewable @State var startDate = Date()
     @Previewable @State var expireDate = Calendar.current.date(byAdding: .day, value: 3, to: Date())!
-    @Previewable @State var frequency = "2"
+    @Previewable @State var frequency = 2
     @Previewable @State var repeatInterval = RepeatInterval.daily
     @Previewable @State var confirm = true
     

@@ -16,7 +16,7 @@ class FollowUpFormViewModel{
     
     var startDate: Date = Date()
     var expireDate: Date = Date()
-    var frequency: String = ""
+    var frequency: Int = 1
     var repeatInterval: RepeatInterval = .daily
     var confirmBeforeFollowUp: Bool = false
     
@@ -36,7 +36,7 @@ class FollowUpFormViewModel{
             schedule: AutomationSchedule(
                 startDate: startDate,
                 expiryDate: expireDate,
-                frequency: Int(frequency) ?? 1,
+                frequency: frequency,
                 repeatInterval: repeatInterval,
                 requiresConfirmation: confirmBeforeFollowUp
             ),
