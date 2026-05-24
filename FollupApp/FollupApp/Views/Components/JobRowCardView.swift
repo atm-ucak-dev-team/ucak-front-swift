@@ -26,7 +26,7 @@ struct JobRowCardView: View {
                 .frame(maxWidth: .infinity)
             } else {
                 ForEach(Array(viewModel.displayedJobs.enumerated()), id: \.element.id) { index, job in
-                    NavigationLink(value: job) {
+                    NavigationLink(value: DashboardRoute.jobDetail(job)) {
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(job.title)

@@ -26,7 +26,7 @@ struct JiraTicketRowView: View {
             } else {
                 ForEach(Array(viewModel.displayedTickets.enumerated()), id: \.element.id) { index, ticket in
                     VStack(spacing: 0) {
-                        NavigationLink(value: ticket) {
+                        NavigationLink(value: DashboardRoute.ticketDetail(ticket)) {
                             HStack(spacing: 16) {
                                 Image(systemName: ticket.iconName)
                                     .font(.system(size: 28))

@@ -75,16 +75,14 @@ struct DashboardView: View {
                     }
                 }
             }
-            .navigationDestination(for: FollowUp.self) { job in
-                JobDetailView(viewModel: JobDetailViewModel(job: job))
-            }
-            .navigationDestination(for: JiraTicketItem.self) { ticket in
-                TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
-            }
             .navigationDestination(for: DashboardRoute.self) { route in
                 switch route {
                 case .allJobs:
                     AllJobsView(viewModel: viewModel.allJobsVM())
+                case .jobDetail(let job):
+                    JobDetailView(viewModel: JobDetailViewModel(job: job))
+                case .ticketDetail(let ticket):
+                    TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
                 }
             }
         }
