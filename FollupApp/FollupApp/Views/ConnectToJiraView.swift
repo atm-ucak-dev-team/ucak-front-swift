@@ -10,6 +10,7 @@ import Foundation
 import SwiftUI
 
 struct ConnectToJiraView: View {
+    @Environment(InitialAuthViewModel.self) private var initialAuthVM
     @State private var vm = ConnectToJiraViewModel()
 
     var body: some View {
@@ -22,6 +23,14 @@ struct ConnectToJiraView: View {
                 Button {
                     Task {
                         await vm.connectJira()
+                        
+                        try? await Task.sleep(for: .seconds(2))
+                        
+                        if vm.authToken != nil {
+                            withAnimation {
+                                initialAuthVM.authState = .authenticated
+                            }
+                        }
                     }
 
                 } label: {
@@ -38,7 +47,7 @@ struct ConnectToJiraView: View {
                 }
 
                 if vm.authToken != nil {
-                    debugTokenSection
+//                    debugTokenSection
                 }
             }
         }
