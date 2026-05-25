@@ -7,10 +7,6 @@
 
 import SwiftUI
 
-enum Tabs {
-    case search
-}
-
 
 struct ChooseJiraTicketView: View {
     @State var jiraItems: [JiraTicketItem] = []
