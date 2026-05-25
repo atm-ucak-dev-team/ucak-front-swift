@@ -13,6 +13,7 @@ enum DashboardRoute: Hashable {
     case allJobs
     case allTickets
     case chooseJiraTicket
+    case followUpForm(JiraTicketItem)
     case jobDetail(FollowUp)
     case ticketDetail(JiraTicketItem)
 }

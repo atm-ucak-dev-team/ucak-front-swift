@@ -80,6 +80,8 @@ struct DashboardView: View {
                     AllTicketsView(viewModel: viewModel.allTicketsVM())
                 case .chooseJiraTicket:
                     ChooseJiraTicketView(viewModel: viewModel.chooseJiraTicketVM())
+                case .followUpForm(let ticket):
+                    FollowUpFormView(viewModel: FollowUpFormViewModel(linkedTicket: ticket))
                 case .jobDetail(let job):
                     JobDetailView(viewModel: JobDetailViewModel(job: job))
                 case .ticketDetail(let ticket):

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ChooseJiraTicketView: View {
     @State var viewModel = JiraTicketCardViewModel()
-    @State private var selectedTicket: JiraTicketItem? = nil
     
     // Standardized 2-column grid layout for beautiful, responsive card layout
     private let columns = [
@@ -36,15 +35,13 @@ struct ChooseJiraTicketView: View {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
                         ForEach(viewModel.tickets) { ticket in
-                            JiraCardView(
-                                ticket: ticket,
-                                isSelected: selectedTicket?.id == ticket.id
-                            )
-                            .onTapGesture {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                    selectedTicket = ticket
-                                }
+                            NavigationLink(value: DashboardRoute.followUpForm(ticket)) {
+                                JiraCardView(
+                                    ticket: ticket,
+                                    isSelected: false
+                                )
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding(20)

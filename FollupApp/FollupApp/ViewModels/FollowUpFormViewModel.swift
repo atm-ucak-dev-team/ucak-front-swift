@@ -24,6 +24,13 @@ class FollowUpFormViewModel{
     
     var linkedTicket: JiraTicketItem?
     
+    init(linkedTicket: JiraTicketItem? = nil) {
+        self.linkedTicket = linkedTicket
+        if let ticket = linkedTicket {
+            self.emailSubject = "[\(ticket.ticketKey)] \(ticket.title) - Follow-Up"
+        }
+    }
+    
     func createFollowUp() -> FollowUp {
         FollowUp(
             id: UUID(),
