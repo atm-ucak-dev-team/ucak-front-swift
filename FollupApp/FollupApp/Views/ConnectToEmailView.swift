@@ -89,7 +89,8 @@ struct ConnectToEmailView: View {
                 .padding(.bottom, 20)
             }
             .padding(.horizontal, 20)
-            .padding(.top, 40)            .alert("Invalid credentials", isPresented: $showError) {
+            .padding(.top, 40)
+            .alert("Invalid credentials", isPresented: $showError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text("Please check your email and password.")
