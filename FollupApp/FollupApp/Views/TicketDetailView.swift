@@ -1,5 +1,5 @@
 //
-//  ListJobView.swift
+//  TicketDetailView.swift
 //  FollupApp
 //
 //  Created by Eileen Anindya on 21/05/26.
@@ -8,56 +8,53 @@
 import SwiftUI
 
 struct TicketDetailView: View {
-//    @Environment(\.dismiss) var dismiss
     @State var ticketViewModel: TicketViewModel = TicketViewModel()
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 12) {
-                VStack(spacing: 12){
-                    SummaryListJobCardView(items: ticketViewModel.summaryItems)
-                    
-                    Picker("Status", selection: Bindable(ticketViewModel).statusFilterIndex) {
-                        Text("All").tag(0)
-                        Text("Replied").tag(1)
-                        Text("Ongoing").tag(2)
-                        Text("Expired").tag(3)
-                    }
-                    .pickerStyle(.segmented)
-                }
-                .padding(.horizontal, 20)
+        VStack(spacing: 12) {
+            VStack(spacing: 12){
+                SummaryListJobCardView(items: ticketViewModel.summaryItems)
                 
-                ScrollView{
-                    if ticketViewModel.filteredJobs.isEmpty{
-                        VStack (spacing: 12){
-                            Image(systemName: "tray")
-                                .font(.system(size: 48))
-                                .foregroundColor(.gray.opacity(0.8))
-                            Text("No jobs found")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.gray)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 200)
-                    } else{
-                        JobRowCardView(viewModel: ticketViewModel.jobViewModel, fixedMinHeight: 0)
+                Picker("Status", selection: Bindable(ticketViewModel).selectedFilter) {
+                    Text("All").tag(FollowUpStatus?.none)
+                    ForEach(FollowUpStatus.allCases, id: \.self) { status in
+                        Text(status.rawValue.capitalized).tag(Optional(status))
                     }
                 }
+                .pickerStyle(.segmented)
             }
-            .navigationTitle(ticketViewModel.selectedJobTitle ?? "Ticket Details")
-            .navigationBarTitleDisplayMode(.inline)
-            .foregroundColor(.themeTypography)
-            .toolbar {
-                ToolbarSpacer(.flexible, placement: .automatic)
-                DefaultToolbarItem(kind: .search, placement: .automatic)
+            .padding(.horizontal, 20)
+            
+            ScrollView{
+                if ticketViewModel.filteredJobs.isEmpty{
+                    VStack (spacing: 12){
+                        Image(systemName: "tray")
+                            .font(.system(size: 48))
+                            .foregroundColor(.gray.opacity(0.8))
+                        Text("No jobs found")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.gray)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: 200)
+                } else{
+                    JobRowCardView(viewModel: ticketViewModel.jobViewModel, fixedMinHeight: 0)
+                }
             }
-            .searchable(
-                text: Bindable(ticketViewModel).searchText,
-                placement: .toolbar,
-                prompt: "Search jobs..."
-            )
-            .searchToolbarBehavior(.automatic)
         }
+        .navigationTitle(ticketViewModel.selectedJobTitle ?? "Ticket Details")
+        .navigationBarTitleDisplayMode(.inline)
+        .foregroundColor(.themeTypography)
+        .toolbar {
+            ToolbarSpacer(.flexible, placement: .automatic)
+            DefaultToolbarItem(kind: .search, placement: .automatic)
+        }
+        .searchable(
+            text: Bindable(ticketViewModel).searchText,
+            placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Search jobs..."
+        )
+        .searchToolbarBehavior(.automatic)
     }
 }
 

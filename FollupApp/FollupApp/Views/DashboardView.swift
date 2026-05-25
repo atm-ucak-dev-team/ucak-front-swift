@@ -6,25 +6,20 @@
 //
 
 import SwiftUI
-
 struct DashboardView: View {
-    var summaryItems: [StatusSummary]?
-    var jobViewModel: JobViewModel = JobViewModel()
-    var ticketViewModel: JiraTicketViewModel = JiraTicketViewModel()
+    @State var viewModel = DashboardViewModel()
     
     var body: some View {
         NavigationStack(){
             VStack(spacing: 12){
-                SummaryCardView(items: summaryItems)
+                SummaryCardView(items: viewModel.summaryItems)
                 VStack(spacing: 8){
                     HStack(spacing: 12){
                         Text("Jobs")
                             .font(.system(size: 22))
                             .foregroundColor(Color.themeTypography)
                             .bold()
-                        Button(action: {
-                            print("View All List Jobs")
-                        }) {
+                        NavigationLink(value: DashboardRoute.allJobs) {
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(Color.themeTypography)
@@ -38,7 +33,7 @@ struct DashboardView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    JobRowCardView(viewModel: jobViewModel)
+                    JobRowCardView(viewModel: viewModel.jobVM)
                 }
                 VStack(spacing: 8){
                     HStack(spacing: 12){
@@ -46,9 +41,7 @@ struct DashboardView: View {
                             .font(.system(size: 22))
                             .foregroundColor(Color.themeTypography)
                             .bold()
-                        Button(action: {
-                            print("View All List Tickets")
-                        }) {
+                        NavigationLink(value: DashboardRoute.allTickets) {
                             Image(systemName: "chevron.right")
                                 .font(.system(size: 14, weight: .semibold))
                                 .foregroundColor(Color.themeTypography)
@@ -62,7 +55,7 @@ struct DashboardView: View {
                         Spacer()
                     }
                     .padding(.horizontal, 20)
-                    JiraTicketRowView(viewModel: ticketViewModel)
+                    JiraTicketRowView(viewModel: viewModel.ticketVM)
                 }
             }
             .frame(maxHeight: .infinity, alignment: .top)
@@ -70,14 +63,29 @@ struct DashboardView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        print("Tombol plus ditekan")
-                    }) {
+                    NavigationLink(value: DashboardRoute.chooseJiraTicket) {
                         Image(systemName: "plus")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(Color.themePrimary)
                             .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
                     }
+                    .buttonStyle(.plain)
+                }
+            }
+            .navigationDestination(for: DashboardRoute.self) { route in
+                switch route {
+                case .allJobs:
+                    AllJobsView(viewModel: viewModel.allJobsVM())
+                case .allTickets:
+                    AllTicketsView(viewModel: viewModel.allTicketsVM())
+                case .chooseJiraTicket:
+                    ChooseJiraTicketView(viewModel: viewModel.chooseJiraTicketVM())
+                case .followUpForm(let ticket):
+                    FollowUpFormView(viewModel: FollowUpFormViewModel(linkedTicket: ticket))
+                case .jobDetail(let job):
+                    JobDetailView(viewModel: JobDetailViewModel(job: job))
+                case .ticketDetail(let ticket):
+                    TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
                 }
             }
         }
@@ -85,8 +93,8 @@ struct DashboardView: View {
 }
 
 #Preview("With Data") {
-    let jobVM = JobViewModel()
-    jobVM.jobs = [
+    let vm = DashboardViewModel()
+    vm.jobVM.jobs = [
         FollowUp(
             id: UUID(),
             title: "Azure Migration",
@@ -121,21 +129,12 @@ struct DashboardView: View {
             emailBody: "Dear Pak"
         )
     ]
-    let ticketVM = JiraTicketViewModel()
-    ticketVM.tickets = [
+    vm.ticketVM.tickets = [
         JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill"),
         JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill"),
         JiraTicketItem(ticketKey: "ADA-003", title: "Jira Ticket 3", iconName: "pawprint.fill")
     ]
-    return DashboardView(
-        summaryItems: [
-            StatusSummary(status: .replied, count: 9),
-            StatusSummary(status: .ongoing, count: 12),
-            StatusSummary(status: .expired, count: 3)
-        ],
-        jobViewModel: jobVM,
-        ticketViewModel: ticketVM
-    )
+    return DashboardView(viewModel: vm)
 }
 
 #Preview("Empty Data") {

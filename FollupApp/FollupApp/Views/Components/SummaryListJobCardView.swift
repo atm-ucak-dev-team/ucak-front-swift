@@ -8,19 +8,7 @@
 import SwiftUI
 
 struct SummaryListJobCardView: View {
-    var items: [StatusSummary] = []
-    
-    init(items: [StatusSummary]? = nil){
-        if let items = items, !items.isEmpty{
-            self.items = items
-        } else{
-            self.items = [
-                StatusSummary(status: .replied, count: 0),
-                StatusSummary(status: .ongoing, count: 0),
-                StatusSummary(status: .expired, count: 0)
-            ]
-        }
-    }
+    let items: [StatusSummary]
     var body: some View {
         HStack {
             ForEach(Array(items.enumerated()), id: \.element.id) { (index: Int, item: StatusSummary) in
@@ -67,5 +55,7 @@ struct SummaryListJobCardView: View {
 }
 
 #Preview("Empty Data"){
-    SummaryListJobCardView()
+    SummaryListJobCardView(items: FollowUpStatus.allCases.map {
+        StatusSummary(status: $0, count: 0)
+    })
 }

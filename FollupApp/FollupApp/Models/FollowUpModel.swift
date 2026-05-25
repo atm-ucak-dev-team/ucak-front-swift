@@ -7,7 +7,10 @@
 
 import Foundation
 
-struct FollowUp: Identifiable {
+struct FollowUp: Identifiable, Hashable {
+    static func == (lhs: FollowUp, rhs: FollowUp) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+    
     let id: UUID                       // Contoh: UUID()
     var title: String                  // Contoh: "Azure Migration Follow-Ups"
     var status: FollowUpStatus         // Contoh: .ongoing

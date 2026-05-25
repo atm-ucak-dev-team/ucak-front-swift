@@ -26,32 +26,32 @@ struct JobRowCardView: View {
                 .frame(maxWidth: .infinity)
             } else {
                 ForEach(Array(viewModel.displayedJobs.enumerated()), id: \.element.id) { index, job in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(job.title)
-                                .font(.system(size: 18))
-                                .foregroundColor(Color.themeTypography)
-                            Text(viewModel.dateInfo(for: job))
-                                .font(.system(size: 15))
-                                .foregroundColor(.gray)
-                            if let ticket = viewModel.ticketInfo(for: job) {
-                                Text(ticket)
+                    NavigationLink(value: DashboardRoute.jobDetail(job)) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(job.title)
+                                    .font(.system(size: 18))
+                                    .foregroundColor(Color.themeTypography)
+                                Text(job.dateInfoText)
                                     .font(.system(size: 15))
                                     .foregroundColor(.gray)
+                                if let ticket = job.ticketInfoText {
+                                    Text(ticket)
+                                        .font(.system(size: 15))
+                                        .foregroundColor(.gray)
+                                }
                             }
+                            Spacer()
+                            
+                            BadgeStatusCardView(status: job.status)
+                            
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.gray)
                         }
-                        Spacer()
-                        
-                        BadgeStatusCardView(status: job.status)
-                        
-                        Image(systemName: "chevron.right")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(.gray)
                     }
+                    .buttonStyle(.plain)
                     .padding(.vertical, 10)
-                    .onTapGesture {     //added by eileen, for debugging
-                        print("Job clicked: \(job.title)")
-                    }
                     
                     if !viewModel.isLastItem(index) {
                         Divider()

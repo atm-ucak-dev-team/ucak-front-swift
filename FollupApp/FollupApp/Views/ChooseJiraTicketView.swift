@@ -7,103 +7,78 @@
 
 import SwiftUI
 
-
 struct ChooseJiraTicketView: View {
-    @State var jiraItems: [JiraTicketItem] = []
-    @State var viewModel: JiraTicketCardViewModel = JiraTicketCardViewModel()
+    @State var viewModel = JiraTicketCardViewModel()
+    
+    // Standardized 2-column grid layout for beautiful, responsive card layout
+    private let columns = [
+        GridItem(.flexible(), spacing: 16),
+        GridItem(.flexible(), spacing: 16)
+    ]
     
     var body: some View {
-
-            VStack {
-                if viewModel.isEmpty {
-                    VStack(spacing: 12) {
-                        Image(systemName: "tray")
-                            .font(.system(size: 48))
-                            .foregroundColor(.gray.opacity(0.8))
-                        Text("No Tickets Found")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundColor(.gray)
-                        Text("Try reconnecting to your Jira account")
-                            .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(.gray)
-                    }
-                    .navigationTitle("Choose a Jira Ticket")
-                    .navigationBarTitleDisplayMode(.large)
-                    .padding(.vertical, 32)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    
-                } else {
-                    ScrollView {
-                        LazyVStack (spacing: 22) {
-                            ForEach(Array(viewModel.ticketRows.enumerated()), id: \.offset) { rowIndex, row in
-                                HStack {
-                                    HStack (spacing: 22) {
-                                        ForEach(row, id: \.ticketKey) { ticket in
-                                            JiraCardView(viewModel: viewModel, items: [ticket])
-                                        }
-                                        
-                                        if row.count % 2 != 0 {
-                                            Spacer(minLength: 175)
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.horizontal)
+        VStack {
+            if viewModel.isEmpty {
+                VStack(spacing: 16) {
+                    Image(systemName: "tray")
+                        .font(.system(size: 48))
+                        .foregroundColor(.gray.opacity(0.8))
+                    Text("No Tickets Found")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.gray)
+                    Text("Try reconnecting to your Jira account")
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundColor(.gray)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else {
+                ScrollView {
+                    LazyVGrid(columns: columns, spacing: 16) {
+                        ForEach(viewModel.tickets) { ticket in
+                            NavigationLink(value: DashboardRoute.followUpForm(ticket)) {
+                                JiraCardView(
+                                    ticket: ticket,
+                                    isSelected: false
+                                )
                             }
+                            .buttonStyle(.plain)
                         }
-                        .padding(.vertical)
                     }
+                    .padding(20)
                 }
             }
-            .navigationTitle("Choose a Jira Ticket")
-            .navigationSubtitle("Pick one ticket from your Jira")
-            .navigationBarTitleDisplayMode(.inline)
-     
+        }
+        .navigationTitle("Choose a Jira Ticket")
+        .navigationSubtitle("Pick one ticket from your Jira")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-
-
-
-#Preview ("Empty State") {
+#Preview("Empty State") {
     NavigationStack {
         ChooseJiraTicketView()
     }
 }
 
 #Preview("Single Data") {
-      NavigationStack {
-          let vm = JiraTicketCardViewModel()
-          vm.tickets = [
-              JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done)
-          ]
-          return ChooseJiraTicketView(viewModel: vm)
-      }
-  }
+    NavigationStack {
+        let vm = JiraTicketCardViewModel()
+        vm.tickets = [
+            JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done)
+        ]
+        return ChooseJiraTicketView(viewModel: vm)
+    }
+}
 
-#Preview("Even Amount of Data") {
-      NavigationStack {
-          let vm = JiraTicketCardViewModel()
-          vm.tickets = [
-              JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done),
-              JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill", status: .inprogress),
-              JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill", status: .todo),
-              JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill")
-          ]
-          return ChooseJiraTicketView(viewModel: vm)
-      }
-  }
-
-#Preview("Odd Amount of Data") {
-      NavigationStack {
-          let vm = JiraTicketCardViewModel()
-          vm.tickets = [
-              JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done),
-              JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill", status: .inprogress),
-              JiraTicketItem(ticketKey: "ADA-002", title: "Jira Ticket 2", iconName: "balloon.2.fill")
-          ]
-          return ChooseJiraTicketView(viewModel: vm)
-      }
-  }
+#Preview("Multiple Data") {
+    NavigationStack {
+        let vm = JiraTicketCardViewModel()
+        vm.tickets = [
+            JiraTicketItem(ticketKey: "ADA-001", title: "Refactor Job Detail Screen UI Layout", iconName: "circle.circle.fill", status: .done),
+            JiraTicketItem(ticketKey: "ADA-002", title: "Complete MVVM Architecture Checklist", iconName: "balloon.2.fill", status: .inprogress),
+            JiraTicketItem(ticketKey: "ADA-003", title: "Implement Jira Authentication Flow", iconName: "balloon.2.fill", status: .todo),
+            JiraTicketItem(ticketKey: "ADA-004", title: "Release Beta Version 1.0.0 to TestFlight", iconName: "balloon.2.fill")
+        ]
+        return ChooseJiraTicketView(viewModel: vm)
+    }
+}

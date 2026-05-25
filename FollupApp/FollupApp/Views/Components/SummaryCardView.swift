@@ -8,17 +8,7 @@
 import SwiftUI
 
 struct SummaryCardView: View {
-    var items: [StatusSummary]
-    
-    init(items: [StatusSummary]? = nil) {
-        if let items = items, !items.isEmpty {
-            self.items = items
-        } else {
-            self.items = FollowUpStatus.allCases.map { status in
-                StatusSummary(status: status, count: 0)
-            }
-        }
-    }
+    let items: [StatusSummary]
     
     var body: some View {
         HStack(spacing: 10) {
@@ -52,7 +42,9 @@ struct SummaryCardView: View {
 }
 
 #Preview("Empty Data") {
-    SummaryCardView()
+    SummaryCardView(items: FollowUpStatus.allCases.map {
+        StatusSummary(status: $0, count: 0)
+    })
 }
 
 #Preview("With Data") {

@@ -11,7 +11,7 @@ import SwiftUI
 struct FollupApp: App {
     var body: some Scene {
         WindowGroup {
-            SplashScreenView()
+            DashboardView()
                 .preferredColorScheme(ColorScheme.light)
         }
     }

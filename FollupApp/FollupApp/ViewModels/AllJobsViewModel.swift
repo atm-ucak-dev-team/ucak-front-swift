@@ -1,28 +1,28 @@
 //
-//  TicketViewModel.swift
+//  AllJobsViewModel.swift
 //  FollupApp
 //
-//  Created by Eileen Anindya on 22/05/26.
+//  Created by DIMAS DAFFA ERNANDA on 25/05/26.
 //
 
 import Foundation
 
 @Observable
-class TicketViewModel{
+class AllJobsViewModel {
     var jobs: [FollowUp] = []
     var searchText: String = ""
     var selectedFilter: FollowUpStatus? = nil
-    var selectedJobTitle: String? = nil
     
-    var filteredJobs: [FollowUp]{
+    // MARK: - Filtered Jobs
+    var filteredJobs: [FollowUp] {
         var result = jobs
         
         if let filter = selectedFilter {
             result = result.filter { $0.status == filter }
         }
         
-        if !searchText.isEmpty{
-            result = result.filter{
+        if !searchText.isEmpty {
+            result = result.filter {
                 $0.title.localizedCaseInsensitiveContains(searchText) ||
                 $0.emailSubject.localizedCaseInsensitiveContains(searchText) ||
                 $0.stakeholder.name.localizedCaseInsensitiveContains(searchText) ||
@@ -32,8 +32,8 @@ class TicketViewModel{
         
         return result
     }
-
-    // MARK: - Child ViewModel (stored to prevent re-creation)
+    
+    // MARK: - Child ViewModel Helper
     private var _jobVM = JobViewModel()
     
     var jobViewModel: JobViewModel {
@@ -42,21 +42,17 @@ class TicketViewModel{
         return _jobVM
     }
     
-    var isEmpty: Bool{
-        filteredJobs.isEmpty
+    // MARK: - Computed Summary
+    var repliedCount: Int {
+        jobs.filter { $0.status == .replied }.count
     }
     
-    var repliedCount: Int{
-        jobs.filter{ $0.status == .replied }.count
-
+    var ongoingCount: Int {
+        jobs.filter { $0.status == .ongoing }.count
     }
     
-    var ongoingCount: Int{
-        jobs.filter{ $0.status == .ongoing }.count
-    }
-    
-    var expiredCount: Int{
-        jobs.filter{ $0.status == .expired }.count
+    var expiredCount: Int {
+        jobs.filter { $0.status == .expired }.count
     }
     
     var summaryItems: [StatusSummary] {
@@ -66,8 +62,5 @@ class TicketViewModel{
             StatusSummary(status: .expired, count: expiredCount)
         ]
     }
-    
-    func isLastItem(_ index: Int) -> Bool {
-        index >= filteredJobs.count - 1
-    }
 }
+

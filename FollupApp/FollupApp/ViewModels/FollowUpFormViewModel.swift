@@ -16,13 +16,20 @@ class FollowUpFormViewModel{
     
     var startDate: Date = Date()
     var expireDate: Date = Date()
-    var frequency: String = ""
+    var frequency: Int = 1
     var repeatInterval: RepeatInterval = .daily
     var confirmBeforeFollowUp: Bool = false
     
     var showConfirmation: Bool = false
     
     var linkedTicket: JiraTicketItem?
+    
+    init(linkedTicket: JiraTicketItem? = nil) {
+        self.linkedTicket = linkedTicket
+        if let ticket = linkedTicket {
+            self.emailSubject = "[\(ticket.ticketKey)] \(ticket.title) - Follow-Up"
+        }
+    }
     
     func createFollowUp() -> FollowUp {
         FollowUp(
@@ -36,7 +43,7 @@ class FollowUpFormViewModel{
             schedule: AutomationSchedule(
                 startDate: startDate,
                 expiryDate: expireDate,
-                frequency: Int(frequency) ?? 1,
+                frequency: frequency,
                 repeatInterval: repeatInterval,
                 requiresConfirmation: confirmBeforeFollowUp
             ),
