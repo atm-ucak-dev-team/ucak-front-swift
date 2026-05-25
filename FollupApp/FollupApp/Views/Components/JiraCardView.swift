@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct JiraCardView: View {
-    var viewModel: JiraTicketCardViewModel
-    var items: [JiraTicketItem] = []
+    @State var viewModel: JiraTicketCardViewModel
+    @State var items: [JiraTicketItem] = []
     
     var body: some View {
         ForEach (Array(items.enumerated()), id: \.element.id) { index, card in
@@ -47,13 +47,6 @@ struct JiraCardView: View {
     ]
     return JiraCardView(viewModel: vm, items: vm.tickets)
 }
-
-//#Preview ("Only One Card") {
-//    let vm = JiraTicketCardViewModel()
-//    return JiraCardView(viewModel: vm, items: [
-//        JiraTicketItem(ticketKey: "ADA-001", title: "Jira Ticket", iconName: "circle.circle.fill", status: .done)
-//    ])
-//}
 
 #Preview ("Empty View") {
     let vm = JiraTicketCardViewModel()
