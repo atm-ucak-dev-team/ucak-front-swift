@@ -63,14 +63,13 @@ struct DashboardView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        print("Tombol plus ditekan")
-                    }) {
+                    NavigationLink(value: DashboardRoute.chooseJiraTicket) {
                         Image(systemName: "plus")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundStyle(Color.themePrimary)
                             .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
                     }
+                    .buttonStyle(.plain)
                 }
             }
             .navigationDestination(for: DashboardRoute.self) { route in
@@ -79,6 +78,8 @@ struct DashboardView: View {
                     AllJobsView(viewModel: viewModel.allJobsVM())
                 case .allTickets:
                     AllTicketsView(viewModel: viewModel.allTicketsVM())
+                case .chooseJiraTicket:
+                    ChooseJiraTicketView(viewModel: viewModel.chooseJiraTicketVM())
                 case .jobDetail(let job):
                     JobDetailView(viewModel: JobDetailViewModel(job: job))
                 case .ticketDetail(let ticket):

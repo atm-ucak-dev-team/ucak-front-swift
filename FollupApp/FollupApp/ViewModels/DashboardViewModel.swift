@@ -54,4 +54,11 @@ class DashboardViewModel {
         vm.tickets = ticketVM.tickets
         return vm
     }
+    
+    /// Creates a JiraTicketCardViewModel populated with all dashboard tickets
+    func chooseJiraTicketVM() -> JiraTicketCardViewModel {
+        let vm = JiraTicketCardViewModel()
+        vm.tickets = ticketVM.tickets
+        return vm
+    }
 }
