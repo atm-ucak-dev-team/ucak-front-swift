@@ -21,9 +21,11 @@ extension FollowUp {
     var dateInfoText: String {
         switch status {
         case .expired:
-            return "Last email: \(Self.dateFormatter.string(from: lastFollowUpDate))"
-        case .ongoing, .replied:
-            return "Next follow-up: \(Self.dateFormatter.string(from: nextFollowUpDate))"
+            return "Last email: \(Self.format(date: lastFollowUpDate))"
+        case .ongoing:
+            return "Next follow-up: \(Self.format(date: nextFollowUpDate))"
+        case .replied:
+            return "Replied at: \(Self.format(date: repliedAt))"
         }
     }
     
@@ -31,5 +33,10 @@ extension FollowUp {
     var ticketInfoText: String? {
         guard let ticket = linkedTicket else { return nil }
         return "Jira Ticket: \(ticket.ticketKey)"
+    }
+
+    private static func format(date: Date?) -> String {
+        guard let date else { return "-" }
+        return dateFormatter.string(from: date)
     }
 }

@@ -12,12 +12,57 @@ class DashboardViewModel {
     // MARK: - Child ViewModels
     var jobVM = JobViewModel()
     var ticketVM = JiraTicketViewModel()
+
+    private let client: APIClient = APIClientRegistry.general
+    var isLoading: Bool = false
+    var errorMessage: String?
+    private var hasLoaded: Bool = false
     
     // Mock Data only appear in debug mode not in production
     init() {
         #if DEBUG
         MockData.populateDashboard(self)
         #endif
+    }
+
+    @MainActor
+    func fetchFollowUps() async {
+        guard !hasLoaded else { return }
+        hasLoaded = true
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let items: [FollowUpAPIItem] = try await client.request(
+                endpoint: "/api/v1/followup",
+                headers: ["X-User-Dummy-Id": "test-user-123"]
+            )
+            let jobs = items.compactMap { $0.toFollowUp() }
+            jobVM.jobs = jobs
+            ticketVM.tickets = Self.buildTickets(from: items)
+        } catch {
+            errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
+            hasLoaded = false
+        }
+    }
+
+    private static func buildTickets(from items: [FollowUpAPIItem]) -> [JiraTicketItem] {
+        var seen = Set<String>()
+        var result: [JiraTicketItem] = []
+
+        for item in items {
+            guard !seen.contains(item.jiraTicketId) else { continue }
+            seen.insert(item.jiraTicketId)
+            result.append(
+                JiraTicketItem(
+                    ticketKey: item.jiraTicketId,
+                    title: item.jiraTicketId,
+                    iconName: "circle.circle.fill"
+                )
+            )
+        }
+
+        return result
     }
     
     // MARK: - Computed Summary
