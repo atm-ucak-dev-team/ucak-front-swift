@@ -41,11 +41,10 @@ struct FollowUpFormView: View {
                             viewModel.showConfirmation = true
                         } label: {
                             Image(systemName: "arrow.up")
-                                    .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(.white)
-                                    .frame(width: 32, height: 32)
-                                    .background(Color.themePrimary)
-                                    .clipShape(Circle())
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(Color.themePrimary)
+                                    .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            
                         }
                         .buttonStyle(.plain)
                     }
