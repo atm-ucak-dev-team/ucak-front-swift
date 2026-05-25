@@ -11,6 +11,6 @@ struct AutomationSchedule: Codable {
     var startDate: Date            // Contoh: 7 March 2026
     var expiryDate: Date           // Contoh: 9 March 2026
     var frequency: Int             // Contoh: 2 (kali)
-    var repeatInterval: String      // Contoh: "Daily"
+    var repeatInterval: RepeatInterval      // Contoh: "Daily"      //edited by eileen
     var requiresConfirmation: Bool // Contoh: true
 }
