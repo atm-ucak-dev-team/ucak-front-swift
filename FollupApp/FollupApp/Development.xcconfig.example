@@ -1,0 +1,15 @@
+//
+//  Development.xcconfig
+//  FollupApp
+//
+//  Created by ATMUcak on 22/05/26.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+// Copy this file to Development.xcconfig
+// Modify the file following your criteria
+
+// Base URL
+BE_BASE_URL = http:/$()/localhost:3001
