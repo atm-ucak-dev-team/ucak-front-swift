@@ -36,7 +36,17 @@ struct ScheduleCardView: View {
                 HStack{
                     Text("Frequency")
                     Spacer()
-                    TextField("1", value: $frequency, format: .number)
+                    TextField("1", text: Binding(
+                        get: { frequency == 1 ? "" : String(frequency) },
+                        set: { newValue in
+                            let filtered = newValue.filter { $0.isNumber }
+                            if let value = Int(filtered) {
+                                frequency = value
+                            } else {
+                                frequency = 1
+                            }
+                        }
+                    ))
                         .foregroundColor(.gray)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.trailing)
