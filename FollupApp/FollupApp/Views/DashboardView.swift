@@ -102,7 +102,9 @@ struct DashboardView: View {
                 }
             }
             .task {
-                await viewModel.fetchFollowUps()
+                async let loadFollowUps = viewModel.fetchFollowUps()
+                async let loadStats = viewModel.fetchStatistics()
+                _ = await (loadFollowUps, loadStats)
             }
         }
     }

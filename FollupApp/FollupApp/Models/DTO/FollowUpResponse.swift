@@ -17,6 +17,12 @@ struct FollowUpAPIItem: Decodable {
 	let status: String
 }
 
+struct FollowUpStatisticResponse: Decodable {
+	let replied: Int
+	let ongoing: Int
+	let expired: Int
+}
+
 extension FollowUpAPIItem {
 	func toFollowUp() -> FollowUp? {
 		guard let status = FollowUpStatus(apiValue: status) else { return nil }
