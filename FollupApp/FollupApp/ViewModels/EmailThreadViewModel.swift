@@ -10,25 +10,32 @@ import Foundation
 @Observable
 final class EmailThreadViewModel {
     var state: EmailThreadState = .idle
+    private let client: APIClient = APIClientRegistry.general
+    var isLoading: Bool = false
+    var errorMessage: String?
+    private var hasLoaded: Bool = false
+    private let dummyUserId = "test-user-123"
 
-    func loadThread(threadID: String) async {
+    @MainActor
+    func fetchThread(threadID: String) async {
+        guard !hasLoaded else { return }
+        hasLoaded = true
+        isLoading = true
         state = .loading
-        do {
-            var messages = try await fetchMessages(threadID: threadID)
-            // Sort ascending so the oldest is first and replies appear “stitched” below
-            messages.sort { $0.sentAt < $1.sentAt }
-            state = .loaded(messages)
-        } catch {
-            state = .failed(error)
-        }
-    }
+        defer { isLoading = false }
 
-    private func fetchMessages(threadID: String) async throws -> [EmailMessage] {
-        // Replace with endpoint boma
-        let url = URL(string: "https://api.example.com/threads/\(threadID)/messages")!
-        let (data, _) = try await URLSession.shared.data(from: url)
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
-        return try decoder.decode([EmailMessage].self, from: data)
+        do {
+            let response: ThreadsResponse = try await client.request(
+                endpoint: "/api/v1/followups/a0000000-0000-0000-0000-00000000000f",
+                headers: ["X-User-Dummy-Id": "test-user-123"]
+            )
+            let messages = response.threads.map { EmailMessage(from: $0) }
+            let sorted = messages.sorted { $0.sentAt < $1.sentAt }
+            state = .loaded(sorted)
+        } catch {
+            errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
+            state = .failed(error)
+            hasLoaded = false
+        }
     }
 }
