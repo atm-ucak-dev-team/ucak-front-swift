@@ -6,3 +6,17 @@
 //
 
 import Foundation
+
+enum EmailThreadState {
+    case idle
+    case loading
+    case loaded([EmailMessage])
+    case failed(Error)
+}
+
+enum EmailState {
+    case idle
+    case loading
+    case loaded(EmailMessage)
+    case failed(Error)
+}
