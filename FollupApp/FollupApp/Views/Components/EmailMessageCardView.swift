@@ -21,7 +21,7 @@ struct EmailMessageCardView: View {
                         emailRow(label: String(localized: "Cc: "), value: message.cc.joined(separator: ", "))
                     }
                     
-                    Text(Self.dateFormatter.string(from: message.sentAt))
+                    Text(EmailMessageViewModel.dateFormatter.string(from: message.sentAt))
                         .font(.system(size: 13))
                         .foregroundStyle(.gray)
                 
@@ -51,13 +51,6 @@ struct EmailMessageCardView: View {
         .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 4)
     }
     
-    private static let dateFormatter: DateFormatter = {
-        let df = DateFormatter()
-        df.dateStyle = .medium
-        df.timeStyle = .short
-        df.locale = .current
-        return df
-    }()
 }
 
 
