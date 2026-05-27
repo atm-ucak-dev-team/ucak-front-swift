@@ -29,9 +29,22 @@
 		38852BE22FB95DBB008AF901 /* FollupAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FollupAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		38AD4EBA2FC4B34800AE5738 /* Exceptions for "FollupApp" folder in "FollupApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 38852BCA2FB95DBA008AF901 /* FollupApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		38852BCD2FB95DBA008AF901 /* FollupApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				38AD4EBA2FC4B34800AE5738 /* Exceptions for "FollupApp" folder in "FollupApp" target */,
+			);
 			path = FollupApp;
 			sourceTree = "<group>";
 		};

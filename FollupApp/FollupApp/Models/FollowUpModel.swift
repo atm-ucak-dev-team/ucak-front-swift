@@ -16,8 +16,9 @@ struct FollowUp: Identifiable, Hashable {
     var status: FollowUpStatus         // Contoh: .ongoing
     var linkedTicket: JiraTicketItem?  // Contoh: JiraTicketItem(ticketKey: "ADA-001", ...)
     var stakeholder: Stakeholder       // Contoh: Stakeholder(name: "Ujang Pintu", ...)
-    var lastFollowUpDate: Date         // Contoh: 10 May 2026
-    var nextFollowUpDate: Date         // Contoh: 15 May 2026
+    var lastFollowUpDate: Date?        // Contoh: 10 May 2026
+    var nextFollowUpDate: Date?        // Contoh: 15 May 2026
+    var repliedAt: Date? = nil         // Contoh: 25 May 2026
     var schedule: AutomationSchedule?  // Contoh: AutomationSchedule(frequency: 2, ...)
     
     // Email content

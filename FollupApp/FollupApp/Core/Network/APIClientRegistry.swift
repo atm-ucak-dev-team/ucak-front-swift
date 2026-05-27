@@ -8,8 +8,15 @@
 import Foundation
 
 enum APIClientRegistry {
-    static let baseUrl: String = Bundle.main.object(forInfoDictionaryKey: "BackendBaseURL") as? String ?? "http://localhost:3000"
+    static let baseUrl: String = {
+        let raw = Bundle.main.object(forInfoDictionaryKey: "BackendBaseURL") as? String ?? ""
+        if raw.isEmpty || raw.contains("$(") {
+            return "https://follup-be.onrender.com"
+        }
+        return raw
+    }()
     
     static let general = APIClient(baseURL: baseUrl)
     static let authenticated = AuthenticatedAPIClient(baseURL: baseUrl, tokenProvider: KeychainManager.shared)
 }
+    

@@ -33,7 +33,7 @@ struct TokenParser {
 
         let params = Dictionary(
             uniqueKeysWithValues: queryItems.compactMap {
-                ($0.name, $0.value ?? "")
+                ($0.name, $0.value ?? "") 
             }
         )
 

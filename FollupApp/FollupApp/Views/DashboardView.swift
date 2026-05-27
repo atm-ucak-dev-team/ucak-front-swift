@@ -72,6 +72,19 @@ struct DashboardView: View {
                     .buttonStyle(.plain)
                 }
             }
+            .overlay {
+                if viewModel.isLoading {
+                    ProgressView()
+                }
+            }
+            .alert("Error", isPresented: Binding(
+                get: { viewModel.errorMessage != nil },
+                set: { if !$0 { viewModel.errorMessage = nil } }
+            )) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(viewModel.errorMessage ?? "")
+            }
             .navigationDestination(for: DashboardRoute.self) { route in
                 switch route {
                 case .allJobs:
@@ -87,6 +100,12 @@ struct DashboardView: View {
                 case .ticketDetail(let ticket):
                     TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
                 }
+            }
+            .task {
+                async let loadFollowUps = viewModel.fetchFollowUps()
+                async let loadStats = viewModel.fetchStatistics()
+                async let loadTickets = viewModel.fetchTickets()
+                _ = await (loadFollowUps, loadStats, loadTickets)
             }
         }
     }
