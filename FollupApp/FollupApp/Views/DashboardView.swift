@@ -96,7 +96,7 @@ struct DashboardView: View {
                 case .followUpForm(let ticket):
                     FollowUpFormView(viewModel: FollowUpFormViewModel(linkedTicket: ticket))
                 case .jobDetail(let job):
-                    JobDetailView(viewModel: JobDetailViewModel(job: job))
+                    JobDetailView(viewModel: JobDetailViewModel(job: job), emailTrail: [])
                 case .ticketDetail(let ticket):
                     TicketDetailView(ticketViewModel: viewModel.ticketDetailVM(for: ticket))
                 }

@@ -172,6 +172,22 @@ enum MockData {
         ),
     ]
     
+    // MARK: - Email Message
+    
+    static var sample: EmailMessage {
+        .init(
+            id: "1",
+            threadID: "1234",
+            inReplyToID: "1234",
+            fromName: "Bomanarakasura",
+            to: ["ujangpintu@mail.com"],
+            cc: ["mamanjendela@mail.com"],
+            subject: "Azure Migration Follow-ups",
+            body: "Here are the next steps we discussed...",
+            sentAt: Date().addingTimeInterval(-3600)
+        )
+    }
+    
     // MARK: - Populate ViewModel
     
     /// Populates a DashboardViewModel with all mock data
