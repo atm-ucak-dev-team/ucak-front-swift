@@ -11,54 +11,59 @@ struct DashboardView: View {
     
     var body: some View {
         NavigationStack(){
-            VStack(spacing: 12){
-                SummaryCardView(items: viewModel.summaryItems)
-                VStack(spacing: 8){
-                    HStack(spacing: 12){
-                        Text("Jobs")
-                            .font(.system(size: 22))
-                            .foregroundColor(Color.themeTypography)
-                            .bold()
-                        NavigationLink(value: DashboardRoute.allJobs) {
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
+            ScrollView {
+                VStack(spacing: 12){
+                    SummaryCardView(items: viewModel.summaryItems)
+                    VStack(spacing: 8){
+                        HStack(spacing: 12){
+                            Text("Jobs")
+                                .font(.system(size: 22))
                                 .foregroundColor(Color.themeTypography)
-                                .frame(width: 36, height: 36)
-                                .background(.ultraThickMaterial)
-                                .clipShape(Circle())
-                                .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                                .bold()
+                            NavigationLink(value: DashboardRoute.allJobs) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(Color.themeTypography)
+                                    .frame(width: 36, height: 36)
+                                    .background(.ultraThickMaterial)
+                                    .clipShape(Circle())
+                                    .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            }
+                            .buttonStyle(.plain)
+                            .glassEffect()
+                            Spacer()
                         }
-                        .buttonStyle(.plain)
-                        .glassEffect()
-                        Spacer()
+                        .padding(.horizontal, 20)
+                        JobRowCardView(viewModel: viewModel.jobVM)
                     }
-                    .padding(.horizontal, 20)
-                    JobRowCardView(viewModel: viewModel.jobVM)
-                }
-                VStack(spacing: 8){
-                    HStack(spacing: 12){
-                        Text("Tickets")
-                            .font(.system(size: 22))
-                            .foregroundColor(Color.themeTypography)
-                            .bold()
-                        NavigationLink(value: DashboardRoute.allTickets) {
-                            Image(systemName: "chevron.right")
-                                .font(.system(size: 14, weight: .semibold))
+                    VStack(spacing: 8){
+                        HStack(spacing: 12){
+                            Text("Tickets")
+                                .font(.system(size: 22))
                                 .foregroundColor(Color.themeTypography)
-                                .frame(width: 36, height: 36)
-                                .background(.ultraThickMaterial)
-                                .clipShape(Circle())
-                                .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                                .bold()
+                            NavigationLink(value: DashboardRoute.allTickets) {
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(Color.themeTypography)
+                                    .frame(width: 36, height: 36)
+                                    .background(.ultraThickMaterial)
+                                    .clipShape(Circle())
+                                    .shadow(color: Color.black.opacity(0.08), radius: 8, x: 0, y: 2)
+                            }
+                            .buttonStyle(.plain)
+                            .glassEffect()
+                            Spacer()
                         }
-                        .buttonStyle(.plain)
-                        .glassEffect()
-                        Spacer()
+                        .padding(.horizontal, 20)
+                        JiraTicketRowView(viewModel: viewModel.ticketVM)
                     }
-                    .padding(.horizontal, 20)
-                    JiraTicketRowView(viewModel: viewModel.ticketVM)
                 }
+                .frame(maxWidth: .infinity, alignment: .top)
             }
-            .frame(maxHeight: .infinity, alignment: .top)
+            .refreshable {
+                await viewModel.refreshAll()
+            }
             .navigationTitle("Follup")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {

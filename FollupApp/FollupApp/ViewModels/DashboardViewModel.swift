@@ -72,7 +72,7 @@ class DashboardViewModel {
             }
             hasLoadedStats = false
         }
-    }
+    } 
 
     @MainActor
     func fetchTickets() async {
@@ -91,6 +91,19 @@ class DashboardViewModel {
             }
             hasLoadedTickets = false
         }
+    }
+
+    @MainActor
+    func refreshAll() async {
+        hasLoaded = false
+        hasLoadedStats = false
+        hasLoadedTickets = false
+        errorMessage = nil
+
+        async let loadFollowUps = fetchFollowUps()
+        async let loadStats = fetchStatistics()
+        async let loadTickets = fetchTickets()
+        _ = await (loadFollowUps, loadStats, loadTickets)
     }
     
     // MARK: - Computed Summary
