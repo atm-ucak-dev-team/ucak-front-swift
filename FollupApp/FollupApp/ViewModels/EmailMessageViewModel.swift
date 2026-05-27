@@ -14,22 +14,22 @@ class EmailMessageViewModel {
     init(trail: EmailMessage? = nil) {
         self.trail = trail
     }
-    
-    enum State {
-        case idle
-        case loading
-        case loaded(EmailMessage)
-        case failed(Error)
-    }
 
-    var state: State = .idle
+    var state: EmailState = .idle
     
     // MARK: - Date Formatter
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd MMM yyyy"
-        return formatter
+    
+    static let dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateStyle = .medium
+        df.timeStyle = .short
+        df.locale = .current
+        return df
     }()
+    
+    func formattedDate(_ date: Date) -> String {
+        Self.dateFormatter.string(from: date)
+    }
     
     // MARK: - Fetch
     func loadEmail(id: String) async {
