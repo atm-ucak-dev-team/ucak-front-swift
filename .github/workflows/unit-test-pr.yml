@@ -1,0 +1,119 @@
+name: Unit Tests Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # paths:
+    #   - '**/*.swift'
+
+jobs:
+  unit-test:
+    name: Run Unit Tests
+    runs-on: macos-latest
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🛠 Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show destinations
+        working-directory: FollupApp
+        run: |
+          xcodebuild \
+            -project FollupApp.xcodeproj \
+            -scheme FollupApp \
+            -showdestinations
+
+      - name: 🧪 Run unit tests
+        working-directory: FollupApp
+        run: |
+          xcodebuild test \
+            -project FollupApp.xcodeproj \
+            -scheme FollupApp \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -skip-testing:FollupAppUITests \
+           | xcpretty --report json --output test-report.json
+           echo "exit_code=${PIPESTATUS[0]}" >> $GITHUB_OUTPUT
+ 
+      - name: 📊 Parse test results
+        working-directory: FollupApp
+        id: parse_results
+        if: always()
+        run: |
+          if [ -f test-report.json ]; then
+            TOTAL=$(jq '[.[] | .tests] | add // 0' test-report.json)
+            PASSED=$(jq '[.[] | .passes] | add // 0' test-report.json)
+            FAILED=$(jq '[.[] | .failures] | add // 0' test-report.json)
+          else
+            TOTAL=0
+            PASSED=0
+            FAILED=0
+          fi
+          echo "total=$TOTAL" >> $GITHUB_OUTPUT
+          echo "passed=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed=$FAILED" >> $GITHUB_OUTPUT
+ 
+      - name: 💬 Comment PR with test results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const total   = '${{ steps.parse_results.outputs.total }}' || '0';
+            const passed  = '${{ steps.parse_results.outputs.passed }}' || '0';
+            const failed  = '${{ steps.parse_results.outputs.failed }}' || '0';
+            const exitCode = '${{ steps.run_tests.outputs.exit_code }}';
+            const status  = exitCode === '0' ? '✅ Passed' : '❌ Failed';
+            const sha     = context.payload.pull_request.head.sha.substring(0, 7);
+            const branch  = context.payload.pull_request.head.ref;
+ 
+            const body = `## 🧪 Unit Test Results — ${status}
+            
+            | | Result |
+            |---|---|
+            | 📦 Total tests | ${total} |
+            | ✅ Passed | ${passed} |
+            | ❌ Failed | ${failed} |
+            | 🌿 Branch | \`${branch}\` |
+            | 🔖 Commit | \`${sha}\` |
+            
+            > Triggered by [GitHub Actions](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+ 
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+ 
+            const botComment = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('Unit Test Results')
+            );
+ 
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
+ 
+      - name: 📁 Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults.xcresult
+          retention-days: 7
