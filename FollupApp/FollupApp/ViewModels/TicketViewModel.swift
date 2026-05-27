@@ -13,7 +13,70 @@ class TicketViewModel{
     var searchText: String = ""
     var selectedFilter: FollowUpStatus? = nil
     var selectedJobTitle: String? = nil
+    var ticketId: String = ""
     
+    private let client: APIClient = APIClientRegistry.general
+    private let dummyUserId = "test-user-123"
+    var isLoading: Bool = false
+    var errorMessage: String? = nil
+    private var hasLoadedJobs: Bool = false
+    private var hasLoadedSummary: Bool = false
+    
+    private var summaryCounts: [FollowUpStatus: Int] = [:]
+        
+    // MARK: - Fetch Jobs per Ticket
+    @MainActor
+    func fetchFollowUps() async {
+        print("Fetching followups for ticket: \(ticketId)")
+
+        guard !hasLoadedJobs else { return }
+        hasLoadedJobs = true
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let items: [FollowUpAPIItem] = try await client.request(
+                endpoint: "/api/v1/\(ticketId)/followups",
+                headers: ["X-User-Dummy-Id": dummyUserId]
+            )
+            jobs = items.compactMap { $0.toFollowUp() }
+        } catch {
+            errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
+            hasLoadedJobs = false
+        }
+        print("Fetched \(jobs.count) jobs")
+    }
+    
+    // MARK: - Fetch Summary per Ticket
+    @MainActor
+    func fetchSummary() async {
+        print("Fetching summary for ticket: \(ticketId)")
+        guard !hasLoadedSummary else { return }
+        hasLoadedSummary = true
+        
+        do {
+            let response: TicketSummaryResponse = try await client.request(
+                endpoint: "/api/v1/\(ticketId)/summary",
+                headers: ["X-User-Dummy-Id": dummyUserId]
+            )
+            summaryCounts = [
+                .replied: response.replied,
+                .ongoing: response.ongoing,
+                .expired: response.expired
+            ]
+            if selectedJobTitle == nil || selectedJobTitle?.isEmpty == true {
+                selectedJobTitle = response.jiraTitle.isEmpty ? ticketId : response.jiraTitle
+            }
+        } catch {
+            if errorMessage == nil {
+                errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
+            }
+            hasLoadedSummary = false
+        }
+        print("Summary: \(summaryCounts)")
+    }
+    
+    // MARK: - Filtered Jobs
     var filteredJobs: [FollowUp]{
         var result = jobs
         
@@ -32,42 +95,20 @@ class TicketViewModel{
         
         return result
     }
+    
+    var jobViewModel: JobViewModel{
+        let viewModel = JobViewModel()
+        viewModel.jobs = filteredJobs
+        viewModel.showAll = true
+        return viewModel
+    }
+    
+    // MARK: - Summary
+    var summaryItems: [StatusSummary]{
+        FollowUpStatus.allCases.map{ status in
+            StatusSummary(status: status, count: summaryCounts[status, default: 0])
+        }
+    }
 
-    // MARK: - Child ViewModel (stored to prevent re-creation)
-    private var _jobVM = JobViewModel()
-    
-    var jobViewModel: JobViewModel {
-        _jobVM.jobs = filteredJobs
-        _jobVM.showAll = true
-        return _jobVM
-    }
-    
-    var isEmpty: Bool{
-        filteredJobs.isEmpty
-    }
-    
-    var repliedCount: Int{
-        jobs.filter{ $0.status == .replied }.count
-
-    }
-    
-    var ongoingCount: Int{
-        jobs.filter{ $0.status == .ongoing }.count
-    }
-    
-    var expiredCount: Int{
-        jobs.filter{ $0.status == .expired }.count
-    }
-    
-    var summaryItems: [StatusSummary] {
-        [
-            StatusSummary(status: .replied, count: repliedCount),
-            StatusSummary(status: .ongoing, count: ongoingCount),
-            StatusSummary(status: .expired, count: expiredCount)
-        ]
-    }
-    
-    func isLastItem(_ index: Int) -> Bool {
-        index >= filteredJobs.count - 1
-    }
+    var isEmpty: Bool { filteredJobs.isEmpty }
 }

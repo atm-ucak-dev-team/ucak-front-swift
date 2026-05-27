@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct TicketDetailView: View {
-    @State var ticketViewModel: TicketViewModel = TicketViewModel()
-
+    @State var ticketViewModel: TicketViewModel
+    
     var body: some View {
         VStack(spacing: 12) {
             VStack(spacing: 12){
@@ -55,6 +55,24 @@ struct TicketDetailView: View {
             prompt: "Search jobs..."
         )
         .searchToolbarBehavior(.automatic)
+        .overlay{
+            if ticketViewModel.isLoading{
+                ProgressView()
+            }
+        }
+        .alert("Error", isPresented: Binding(
+            get: { ticketViewModel.errorMessage != nil },
+            set: { if !$0 {ticketViewModel.errorMessage = nil }}
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(ticketViewModel.errorMessage ?? "")
+        }
+        .task {
+            async let loadJobs: Void = ticketViewModel.fetchFollowUps()
+            async let loadSummary: Void = ticketViewModel.fetchSummary()
+            _ = await (loadJobs, loadSummary)
+        }
     }
 }
 
@@ -134,5 +152,5 @@ struct TicketDetailView: View {
 }
 
 #Preview("Empty Data"){
-    TicketDetailView()
+    TicketDetailView(ticketViewModel: TicketViewModel())
 }
