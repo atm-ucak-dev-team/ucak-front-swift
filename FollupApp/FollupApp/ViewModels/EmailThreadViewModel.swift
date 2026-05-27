@@ -9,14 +9,7 @@ import Foundation
 
 @Observable
 final class EmailThreadViewModel {
-    enum State {
-        case idle
-        case loading
-        case loaded([EmailMessage])
-        case failed(Error)
-    }
-
-    var state: State = .idle
+    var state: EmailThreadState = .idle
 
     func loadThread(threadID: String) async {
         state = .loading
