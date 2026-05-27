@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobDetailView: View {
     @State var viewModel: JobDetailViewModel
+    @State var emailTrail: [EmailMessage]
     
     var body: some View {
         VStack(alignment: .leading,spacing: 12){
@@ -38,8 +39,6 @@ struct JobDetailView: View {
                 }
                 .padding(.horizontal, 20)
                 
-                Spacer()
-                
                 HStack(alignment: .top, spacing: 10){
                     Image(systemName: "info.circle")
                         .foregroundColor(.themeTypography)
@@ -51,9 +50,24 @@ struct JobDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.gray.opacity(0.1))
+                        .fill(Color.themeAccent.opacity(0.2))
                 )
                 .padding(.horizontal, 20)
+                
+                VStack {
+                    Text("Email Activities")
+                        .foregroundColor(.primary)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 20)
+                .padding(.horizontal, 20)
+                .background(Color.gray.opacity(0.2))
+                
+                
+                ScrollView {
+                    EmailThreadView(messages: emailTrail)
+                }
+                
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -97,9 +111,22 @@ struct JobDetailView: View {
             emailSubject: "Follow-Up",
             emailBody: "Dear Pak Bom, gimana ya pak"
         )
-    ))
+    ),
+        emailTrail: [MockData.sample,
+                     .init(
+                         id: "2",
+                         threadID: "123",
+                         inReplyToID: "1234",
+                         fromName: "Ujang Pintu",
+                         to: ["bomanarakasura@mail.com"],
+                         cc: ["mamanjendela@mail.com"],
+                         subject: "Re: Azure Migration Follow-ups",
+                         body: "Thanks for the details. I’ve added a couple of questions...",
+                         sentAt: Date().addingTimeInterval(-1800)
+                     )]
+)
 }
 
 #Preview("No Data") {
-    JobDetailView(viewModel: JobDetailViewModel(job: nil))
+    JobDetailView(viewModel: JobDetailViewModel(job: nil), emailTrail: [])
 }
