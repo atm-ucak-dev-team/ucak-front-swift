@@ -18,6 +18,7 @@ class DashboardViewModel {
     var errorMessage: String?
     private var hasLoaded: Bool = false
     private var hasLoadedStats: Bool = false
+    private var hasLoadedTickets: Bool = false
     private let dummyUserId = "test-user-123"
 
     private var summaryCounts: [FollowUpStatus: Int] = [:]
@@ -44,7 +45,6 @@ class DashboardViewModel {
             )
             let jobs = items.compactMap { $0.toFollowUp() }
             jobVM.jobs = jobs
-            ticketVM.tickets = Self.buildTickets(from: items)
         } catch {
             errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
             hasLoaded = false
@@ -74,23 +74,23 @@ class DashboardViewModel {
         }
     }
 
-    private static func buildTickets(from items: [FollowUpAPIItem]) -> [JiraTicketItem] {
-        var seen = Set<String>()
-        var result: [JiraTicketItem] = []
+    @MainActor
+    func fetchTickets() async {
+        guard !hasLoadedTickets else { return }
+        hasLoadedTickets = true
 
-        for item in items {
-            guard !seen.contains(item.jiraTicketId) else { continue }
-            seen.insert(item.jiraTicketId)
-            result.append(
-                JiraTicketItem(
-                    ticketKey: item.jiraTicketId,
-                    title: item.jiraTicketId,
-                    iconName: "circle.circle.fill"
-                )
+        do {
+            let items: [JiraTicketAPIItem] = try await client.request(
+                endpoint: "/api/v1/tickets",
+                headers: ["X-User-Dummy-Id": dummyUserId]
             )
+            ticketVM.tickets = items.map { $0.toJiraTicket() }
+        } catch {
+            if errorMessage == nil {
+                errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
+            }
+            hasLoadedTickets = false
         }
-
-        return result
     }
     
     // MARK: - Computed Summary
