@@ -25,6 +25,9 @@ class InitialAuthViewModel {
                 authState = .authenticated
             }
         } catch {
+            // Clear stale/expired tokens so ConnectToJiraView
+            // doesn't see an old token and show "Connected to Jira" in a disabled state
+            KeychainManager.shared.clearTokens()
             authState = .unauthenticated
         }
     }
