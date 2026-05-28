@@ -16,10 +16,11 @@ class DashboardViewModel {
     private let client: APIClient = APIClientRegistry.general
     var isLoading: Bool = false
     var errorMessage: String?
+    var needsRefresh: Bool = false
     private var hasLoaded: Bool = false
     private var hasLoadedStats: Bool = false
     private var hasLoadedTickets: Bool = false
-    private let dummyUserId = "test-user-123"
+    private let dummyUserId = "cihuy"
 
     private var summaryCounts: [FollowUpStatus: Int] = [:]
     

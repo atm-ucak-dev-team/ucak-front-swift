@@ -37,7 +37,8 @@ extension ChooseTicketResponseItem {
             ticketKey: key,
             title: ticketTitle,
             iconName: "circle.circle.fill",
-            status: JiraStatus.from(apiStatus: status)
+            status: JiraStatus.from(apiStatus: status),
+            stakeholder: stakeholder
         )
     }
 }

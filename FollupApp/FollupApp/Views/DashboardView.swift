@@ -99,7 +99,14 @@ struct DashboardView: View {
                 case .chooseJiraTicket:
                     ChooseJiraTicketView(viewModel: viewModel.chooseJiraTicketVM())
                 case .followUpForm(let ticket):
-                    FollowUpFormView(viewModel: FollowUpFormViewModel(linkedTicket: ticket))
+                    FollowUpFormView(
+                        viewModel: FollowUpFormViewModel(linkedTicket: ticket),
+                        onSuccess: {
+                            Task {
+                                await viewModel.refreshAll()
+                            }
+                        }
+                    )
                 case .jobDetail(let job):
                     JobDetailView(viewModel: JobDetailViewModel(job: job), emailTrail: [])
                 case .ticketDetail(let ticket):

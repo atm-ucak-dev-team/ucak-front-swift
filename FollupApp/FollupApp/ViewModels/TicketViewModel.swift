@@ -16,7 +16,7 @@ class TicketViewModel{
     var ticketId: String = ""
     
     private let client: APIClient = APIClientRegistry.general
-    private let dummyUserId = "test-user-123"
+    private let dummyUserId = "cihuy"
     var isLoading: Bool = false
     var errorMessage: String? = nil
     private var hasLoadedJobs: Bool = false

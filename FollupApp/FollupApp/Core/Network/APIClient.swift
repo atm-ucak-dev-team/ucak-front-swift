@@ -83,13 +83,23 @@ class APIClient {
             throw APIError.invalidResponse
         }
 
-        switch httpResponse.statusCode {
-        case 200...299:
-            break // success
-        case 401:
-            throw APIError.unauthorized
-        default:
-            throw APIError.httpError(statusCode: httpResponse.statusCode, message: "Failed to fetch from server")
+        if !(200...299).contains(httpResponse.statusCode) {
+            if httpResponse.statusCode == 401 {
+                throw APIError.unauthorized
+            }
+            
+            // Try to parse the error message from the response body
+            var serverMessage: String? = nil
+            if let errorObj = try? JSONDecoder().decode([String: String].self, from: data) {
+                serverMessage = errorObj["message"] ?? errorObj["error"] ?? errorObj["errorMessage"]
+            } else if let errorObj = try? JSONDecoder().decode([String: [String]].self, from: data) {
+                // If it's a validation error dictionary
+                serverMessage = errorObj.map { "\($0.key): \($0.value.joined(separator: ", "))" }.joined(separator: "; ")
+            } else if let rawString = String(data: data, encoding: .utf8), !rawString.isEmpty {
+                serverMessage = rawString
+            }
+            
+            throw APIError.httpError(statusCode: httpResponse.statusCode, message: serverMessage ?? "Failed to fetch from server")
         }
 
         // 6. Decode wrapped response, return only `data`

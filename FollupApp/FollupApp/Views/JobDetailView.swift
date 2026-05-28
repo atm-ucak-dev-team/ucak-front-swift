@@ -87,7 +87,11 @@ struct JobDetailView: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
-
+        .task {
+            if let jobId = viewModel.job?.id {
+                await threadVM.fetchThread(threadID: jobId.uuidString.lowercased())
+            }
+        }
     }
     
     private func detailRow(icon: String, label: String, value: String) -> some View{

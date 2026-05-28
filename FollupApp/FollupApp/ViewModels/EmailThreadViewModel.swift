@@ -14,7 +14,7 @@ final class EmailThreadViewModel {
     var isLoading: Bool = false
     var errorMessage: String?
     private var hasLoaded: Bool = false
-    private let dummyUserId = "test-user-123"
+    private let dummyUserId = "cihuy"
 
     @MainActor
     func fetchThread(threadID: String) async {
@@ -26,8 +26,8 @@ final class EmailThreadViewModel {
 
         do {
             let response: ThreadsResponse = try await client.request(
-                endpoint: "/api/v1/followups/a0000000-0000-0000-0000-00000000000f",
-                headers: ["X-User-Dummy-Id": "test-user-123"]
+                endpoint: "/api/v1/followups/\(threadID)",
+                headers: ["X-User-Dummy-Id": "cihuy"]
             )
             let messages = response.threads.map { EmailMessage(from: $0) }
             let sorted = messages.sorted { $0.sentAt < $1.sentAt }

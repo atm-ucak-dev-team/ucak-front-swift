@@ -28,6 +28,7 @@ extension FollowUpAPIItem {
 		guard let status = FollowUpStatus(apiValue: status) else { return nil }
 
 		let ticket = JiraTicketItem(
+			id: jiraTicketId,
 			ticketKey: jiraTicketId,
 			title: jiraTicketId,
 			iconName: "circle.circle.fill"

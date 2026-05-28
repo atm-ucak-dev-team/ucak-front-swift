@@ -16,6 +16,7 @@ extension JiraTicketAPIItem {
 	func toJiraTicket() -> JiraTicketItem {
 		let title = jiraTitle.isEmpty ? jiraTicketId : jiraTitle
 		return JiraTicketItem(
+			id: jiraTicketId,
 			ticketKey: jiraTicketId,
 			title: title,
 			iconName: "circle.circle.fill"

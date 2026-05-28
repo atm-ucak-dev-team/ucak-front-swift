@@ -16,12 +16,14 @@ struct JiraTicketItem: Identifiable, Hashable {
     let title: String // Contoh: "Azure Migration"
     let iconName: String // Contoh: "circle.circle.fill"
     let status: JiraStatus? // Contoh: .inprogress
+    let stakeholder: String? // Contoh: "Radit" — from Jira API
     
-    init(id: String = UUID().uuidString, ticketKey: String, title: String, iconName: String, status: JiraStatus? = nil) {
+    init(id: String = UUID().uuidString, ticketKey: String, title: String, iconName: String, status: JiraStatus? = nil, stakeholder: String? = nil) {
         self.id = id
         self.ticketKey = ticketKey
         self.title = title
         self.iconName = iconName
         self.status = status
+        self.stakeholder = stakeholder
     }
 }
