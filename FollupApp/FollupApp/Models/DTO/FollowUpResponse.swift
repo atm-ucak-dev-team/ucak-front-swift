@@ -28,10 +28,27 @@ extension FollowUpAPIItem {
 	func toFollowUp() -> FollowUp? {
 		guard let status = FollowUpStatus(apiValue: status) else { return nil }
 
+		var parsedKey = jiraTicketId
+		var parsedTitle = jiraTicketId
+		
+		// Extract ticket key inside brackets [KEY] and the clean title
+		if subject.hasPrefix("["), let closingBracketIndex = subject.firstIndex(of: "]") {
+			let keyRange = subject.index(after: subject.startIndex)..<closingBracketIndex
+			parsedKey = String(subject[keyRange]).trimmingCharacters(in: .whitespacesAndNewlines)
+			
+			let afterBracket = subject.index(after: closingBracketIndex)...
+			var remainingText = String(subject[afterBracket]).trimmingCharacters(in: .whitespacesAndNewlines)
+			
+			if let followRange = remainingText.range(of: " - Follow", options: .backwards) {
+				remainingText = String(remainingText[..<followRange.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+			}
+			parsedTitle = remainingText.isEmpty ? jiraTicketId : remainingText
+		}
+
 		let ticket = JiraTicketItem(
 			id: jiraTicketId,
-			ticketKey: jiraTicketId,
-			title: jiraTicketId,
+			ticketKey: parsedKey,
+			title: parsedTitle,
 			iconName: "circle.circle.fill"
 		)
 

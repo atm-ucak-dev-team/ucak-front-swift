@@ -46,12 +46,14 @@ struct SplashScreenView: View {
                 .environment(initialViewModel)
         } else {
             // Main Splash screen
-            VStack {
-                Image(systemName: "envelope.and.hand.raised.fill")
-                    .font(.system(size: 80))
-                    .foregroundColor(.themeAccent)
-                    .scaleEffect(isPulsing ? 1.1 : 1.0)
-                    .opacity(isPulsing ? 0.8 : 1.0)
+            VStack(spacing: 24) {
+                Image("Logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 140, height: 140)
+                    .cornerRadius(28)
+                    .shadow(color: Color.black.opacity(0.15), radius: 15, x: 0, y: 10)
+                    .scaleEffect(isPulsing ? 1.05 : 1.0)
                     .animation(
                         .easeInOut(duration: 1.2)
                             .repeatForever(autoreverses: true),
@@ -61,8 +63,6 @@ struct SplashScreenView: View {
                         isPulsing = true
                     }
 
-                Text("Follup.")
-                    .font(.largeTitle.bold())
             }
             .onAppear {
                 Task {

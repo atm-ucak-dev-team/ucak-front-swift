@@ -29,10 +29,11 @@ extension FollowUp {
         }
     }
     
-    /// Returns linked Jira ticket key, or nil if no ticket is linked
+    /// Returns linked Jira ticket title, or nil if no ticket is linked
     var ticketInfoText: String? {
         guard let ticket = linkedTicket else { return nil }
-        return "Jira Ticket: \(ticket.ticketKey)"
+        let displayValue = (ticket.title == ticket.ticketKey || ticket.title.isEmpty) ? ticket.ticketKey : ticket.title
+        return "Jira Ticket: \(displayValue)"
     }
 
     private static func format(date: Date?) -> String {

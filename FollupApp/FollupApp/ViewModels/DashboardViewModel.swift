@@ -101,9 +101,16 @@ class DashboardViewModel {
     private func enrichTicketTitles() {
         for index in 0..<ticketVM.tickets.count {
             let ticket = ticketVM.tickets[index]
-            if let matchingJob = jobVM.jobs.first(where: { $0.linkedTicket?.ticketKey == ticket.ticketKey }) {
-                if ticket.title == ticket.ticketKey || ticket.title.isEmpty {
-                    let cleanTitle = cleanTitleFromSubject(matchingJob.title, key: ticket.ticketKey)
+            
+            // Only attempt to enrich if the title is currently empty, or just a raw numeric ID
+            let isNumericId = Double(ticket.title) != nil
+            if ticket.title.isEmpty || isNumericId {
+                // Find all jobs matching this ticket ID
+                let matchingJobs = jobVM.jobs.filter { $0.linkedTicket?.id == ticket.id }
+                
+                // Find the first job that has a system-generated bracketed subject [KEY]
+                if let jobWithRealTitle = matchingJobs.first(where: { $0.title.hasPrefix("[") && $0.title.contains("]") }) {
+                    let cleanTitle = cleanTitleFromSubject(jobWithRealTitle.title, key: ticket.ticketKey)
                     
                     ticketVM.tickets[index] = JiraTicketItem(
                         id: ticket.id,
