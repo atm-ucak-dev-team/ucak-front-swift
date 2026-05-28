@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JobDetailView: View {
     @State var viewModel: JobDetailViewModel
+    @State private var threadVM = EmailThreadViewModel()
     @State var emailTrail: [EmailMessage]
     
     var body: some View {
@@ -64,13 +65,29 @@ struct JobDetailView: View {
                 .background(Color.gray.opacity(0.2))
                 
                 
-                ScrollView {
-                    EmailThreadView(messages: emailTrail)
+                Group {
+                    switch threadVM.state {
+                    case .idle, .loading:
+                        ProgressView()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+
+                    case .failed(let error):
+                        ContentUnavailableView("Failed to load emails",
+                                               systemImage: "exclamationmark.triangle",
+                                               description: Text(error.localizedDescription))
+
+                    case .loaded(let messages):
+                        ScrollView {
+                            EmailThreadView(messages: messages)
+                        }
+                    }
                 }
                 
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+
     }
     
     private func detailRow(icon: String, label: String, value: String) -> some View{

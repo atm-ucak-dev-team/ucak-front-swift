@@ -42,7 +42,7 @@ class AuthenticatedAPIClient: APIClient {
         var headers = additionalHeaders
         headers["X-Jira-Access-Token"] = token
         headers["X-User-Cloud-ID"] = KeychainManager.shared.getCloudId()
-        headers["X-User-Dummy-Id"] = "dummy"
+        headers["X-User-Dummy-Id"] = "cihuy"
 
         // 3. Perform request (with one 401 retry)
         do {
@@ -59,7 +59,7 @@ class AuthenticatedAPIClient: APIClient {
             }
             headers["X-Jira-Access-Token"] = refreshedToken
             headers["X-User-Cloud-ID"] = KeychainManager.shared.getCloudId()
-            headers["X-User-Dummy-Id"] = "dummy"
+            headers["X-User-Dummy-Id"] = "cihuy"
             return try await super.request(
                 endpoint: endpoint,
                 method: method,

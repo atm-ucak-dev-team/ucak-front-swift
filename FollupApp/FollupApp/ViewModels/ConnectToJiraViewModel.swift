@@ -34,10 +34,10 @@ class ConnectToJiraViewModel {
         
         do {
             // MARK: Uncomment
-            // let initAuthURL = try await getAuthUrl()
-            // let targetURL = initAuthURL.connectUrl
+             let initAuthURL = try await getAuthUrl()
+             let targetURL = initAuthURL.connectUrl
             
-            let targetURL = "\(APIClientRegistry.baseUrl)/auth/jira/dummy-callback"
+//            let targetURL = "\(APIClientRegistry.baseUrl)/auth/jira/dummy-callback"
             
             _ = try await authService.login(with: targetURL, callbackScheme: scheme)
             
