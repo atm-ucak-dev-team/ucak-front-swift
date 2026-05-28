@@ -10,6 +10,7 @@ import Foundation
 /// Request body for POST /api/v1/followups
 struct CreateFollowUpRequest: Encodable {
     let jiraTicketId: String
+    let jiraTicketKey: String
     let jiraTicketTitle: String
     let jiraStakeholder: String
     let jiraTicketStatus: String

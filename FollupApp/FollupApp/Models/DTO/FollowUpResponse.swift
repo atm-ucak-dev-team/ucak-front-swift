@@ -11,6 +11,7 @@ struct FollowUpAPIItem: Decodable {
 	let followupId: String
 	let jiraTicketId: String
 	let subject: String
+	let stakeholderName: String?
 	let lastFollowUp: Date?
 	let nextFollowUp: Date?
 	let repliedAt: Date?
@@ -39,7 +40,7 @@ extension FollowUpAPIItem {
 			title: subject,
 			status: status,
 			linkedTicket: ticket,
-			stakeholder: Stakeholder(id: UUID(), name: "Unknown", email: "-"),
+			stakeholder: Stakeholder(id: UUID(), name: stakeholderName ?? "Unknown", email: "-"),
 			lastFollowUpDate: lastFollowUp,
 			nextFollowUpDate: nextFollowUp,
 			repliedAt: repliedAt,

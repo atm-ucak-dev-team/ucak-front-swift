@@ -52,6 +52,7 @@ class FollowUpFormViewModel {
         do {
             let requestBody = CreateFollowUpRequest(
                 jiraTicketId: linkedTicket?.id ?? "",
+                jiraTicketKey: linkedTicket?.ticketKey ?? "",
                 jiraTicketTitle: linkedTicket?.title ?? emailSubject,
                 jiraStakeholder: linkedTicket?.stakeholder ?? "",
                 jiraTicketStatus: linkedTicket?.status?.rawValue ?? "UNKNOWN",

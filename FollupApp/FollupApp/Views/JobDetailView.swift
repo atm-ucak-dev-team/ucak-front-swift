@@ -88,8 +88,12 @@ struct JobDetailView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .task {
+            async let loadDetails = viewModel.fetchDetails()
             if let jobId = viewModel.job?.id {
-                await threadVM.fetchThread(threadID: jobId.uuidString.lowercased())
+                async let loadThread = threadVM.fetchThread(threadID: jobId.uuidString.lowercased())
+                _ = await (loadDetails, loadThread)
+            } else {
+                _ = await loadDetails
             }
         }
     }

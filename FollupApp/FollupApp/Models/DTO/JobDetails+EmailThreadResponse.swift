@@ -82,3 +82,54 @@ extension EmailMessage {
         self.sentAt = dto.lastSyncedAt
     }
 }
+
+struct FollowUpDetailResponse: Decodable {
+    let subject: String
+    let status: String
+    let expireDateTime: Date?
+    let lastFollowUp: Date?
+    let stakeholderName: String
+    let sendEmailEvery: String?
+    let suggestion: String
+    let jiraTicketTitle: String?
+    let jiraTicketStatus: String?
+    let threads: [EmailItem]
+}
+
+extension FollowUpDetailResponse {
+    private func mapSendEmailEvery(_ value: String) -> RepeatInterval? {
+        switch value.lowercased() {
+        case "daily": return .daily
+        case "every2days", "every_2_days", "every-2-days": return .every2Days
+        case "every3days", "every_3_days", "every-3-days": return .every3Days
+        case "weekly": return .weekly
+        case "biweekly": return .biweekly
+        default: return nil
+        }
+    }
+    
+    func toSchedule() -> AutomationSchedule? {
+        let send = sendEmailEvery ?? "daily" // Fallback to "daily" if backend returns null
+        let interval = mapSendEmailEvery(send) ?? .daily
+        
+        let start = Date()
+        let expiry = expireDateTime ?? (Calendar.current.date(byAdding: .day, value: 14, to: start) ?? start)
+        
+        let frequency: Int
+        switch interval {
+        case .daily: frequency = 1
+        case .every2Days: frequency = 2
+        case .every3Days: frequency = 3
+        case .weekly: frequency = 1
+        case .biweekly: frequency = 2
+        }
+        
+        return AutomationSchedule(
+            startDate: start,
+            expiryDate: expiry,
+            frequency: frequency,
+            repeatInterval: interval,
+            requiresConfirmation: true
+        )
+    }
+}

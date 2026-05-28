@@ -46,6 +46,7 @@ class DashboardViewModel {
             )
             let jobs = items.compactMap { $0.toFollowUp() }
             jobVM.jobs = jobs
+            enrichTicketTitles()
         } catch {
             errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
             hasLoaded = false
@@ -86,12 +87,48 @@ class DashboardViewModel {
                 headers: ["X-User-Dummy-Id": dummyUserId]
             )
             ticketVM.tickets = items.map { $0.toJiraTicket() }
+            enrichTicketTitles()
         } catch {
             if errorMessage == nil {
                 errorMessage = (error as? APIError)?.errorDescription ?? error.localizedDescription
             }
             hasLoadedTickets = false
         }
+    }
+
+    /// Client-side enrichment to match raw ticket IDs (e.g. "10101") with active follow-ups,
+    /// extracting and displaying the real clean title (e.g. "Project Charter Follup").
+    private func enrichTicketTitles() {
+        for index in 0..<ticketVM.tickets.count {
+            let ticket = ticketVM.tickets[index]
+            if let matchingJob = jobVM.jobs.first(where: { $0.linkedTicket?.ticketKey == ticket.ticketKey }) {
+                if ticket.title == ticket.ticketKey || ticket.title.isEmpty {
+                    let cleanTitle = cleanTitleFromSubject(matchingJob.title, key: ticket.ticketKey)
+                    
+                    ticketVM.tickets[index] = JiraTicketItem(
+                        id: ticket.id,
+                        ticketKey: ticket.ticketKey,
+                        title: cleanTitle,
+                        iconName: ticket.iconName,
+                        status: ticket.status,
+                        stakeholder: ticket.stakeholder
+                    )
+                }
+            }
+        }
+    }
+    
+    private func cleanTitleFromSubject(_ subject: String, key: String) -> String {
+        var title = subject
+        // 1. Remove bracketed key prefix: e.g. "[ADAC2-5] " or "[10101] "
+        if let range = title.range(of: "]") {
+            title = String(title[range.upperBound...]).trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        // 2. Remove " - Follow-Up" or " - Follow-ups" suffix
+        if let range = title.range(of: " - Follow", options: .backwards) {
+            title = String(title[..<range.lowerBound]).trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return title.isEmpty ? subject : title
     }
 
     @MainActor
