@@ -13,6 +13,7 @@ extension JiraStatus {
         case .inprogress: return Color.indigo
         case .todo: return Color.orange
         case .done: return Color.green
+        case .inreview: return Color.yellow
         case .unknown: return Color.gray
         }
     }

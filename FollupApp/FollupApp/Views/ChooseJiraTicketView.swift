@@ -17,8 +17,81 @@ struct ChooseJiraTicketView: View {
     ]
     
     var body: some View {
-        VStack {
-            if viewModel.isEmpty {
+        VStack(spacing: 0) {
+            // MARK: - Search Bar
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search tickets...", text: $viewModel.searchText)
+                    .textFieldStyle(.plain)
+                    .autocorrectionDisabled()
+                
+                if !viewModel.searchText.isEmpty {
+                    Button {
+                        viewModel.searchText = ""
+                        Task {
+                            await viewModel.fetchJiraIssues()
+                        }
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(.gray)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(12)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemGray6))
+            )
+            .padding(.horizontal, 20)
+            .padding(.top, 12)
+            .padding(.bottom, 8)
+            .onSubmit {
+                Task {
+                    await viewModel.fetchJiraIssues(search: viewModel.searchText)
+                }
+            }
+            
+            // MARK: - Content
+            if viewModel.isLoading {
+                Spacer()
+                VStack(spacing: 12) {
+                    ProgressView()
+                        .scaleEffect(1.2)
+                    Text("Loading tickets...")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.gray)
+                }
+                Spacer()
+            } else if let errorMessage = viewModel.errorMessage {
+                Spacer()
+                VStack(spacing: 16) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 48))
+                        .foregroundColor(.orange.opacity(0.8))
+                    Text("Something went wrong")
+                        .font(.system(size: 16, weight: .medium))
+                        .foregroundColor(.primary)
+                    Text(errorMessage)
+                        .font(.system(size: 13, weight: .regular))
+                        .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
+                    Button {
+                        Task {
+                            await viewModel.fetchJiraIssues(search: viewModel.searchText)
+                        }
+                    } label: {
+                        Label("Retry", systemImage: "arrow.clockwise")
+                            .font(.system(size: 14, weight: .semibold))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.themePrimary)
+                }
+                .padding(.horizontal, 32)
+                Spacer()
+            } else if viewModel.isEmpty {
+                Spacer()
                 VStack(spacing: 16) {
                     Image(systemName: "tray")
                         .font(.system(size: 48))
@@ -26,11 +99,15 @@ struct ChooseJiraTicketView: View {
                     Text("No Tickets Found")
                         .font(.system(size: 16, weight: .medium))
                         .foregroundColor(.gray)
-                    Text("Try reconnecting to your Jira account")
+                    Text(viewModel.searchText.isEmpty
+                         ? "Try reconnecting to your Jira account"
+                         : "No tickets match \"\(viewModel.searchText)\"")
                         .font(.system(size: 13, weight: .regular))
                         .foregroundColor(.gray)
+                        .multilineTextAlignment(.center)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Spacer()
             } else {
                 ScrollView {
                     LazyVGrid(columns: columns, spacing: 16) {
@@ -46,11 +123,18 @@ struct ChooseJiraTicketView: View {
                     }
                     .padding(20)
                 }
+                .refreshable {
+                    await viewModel.fetchJiraIssues(search: viewModel.searchText)
+                }
             }
         }
         .navigationTitle("Choose a Jira Ticket")
         .navigationSubtitle("Pick one ticket from your Jira")
         .navigationBarTitleDisplayMode(.inline)
+        .task {
+            // Fetch tickets on appear
+            await viewModel.fetchJiraIssues()
+        }
     }
 }
 
